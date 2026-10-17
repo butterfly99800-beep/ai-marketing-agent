@@ -1,0 +1,50 @@
+{
+  "file": "km-carefree.mp3",
+  "name": "Carefree · 轻快生活",
+  "title": "Carefree",
+  "artist": "Kevin MacLeod",
+  "category": "轻快生活",
+  "bpm": 96.0,
+  "tags": [
+    "生活",
+    "亲切",
+    "服务",
+    "家庭",
+    "轻松"
+  ],
+  "energy": "balanced",
+  "avoid_tags": [
+    "严肃",
+    "工业"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3",
+  "credit": "\"Carefree\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 205.14,
+  "start_seconds": 0,
+  "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Carefree",
+    "filename": "Carefree.mp3",
+    "length": "00:03:25",
+    "instruments": "Ukulele, Guitar, Marimba, Glockenspiel, Percussion",
+    "genre": "5",
+    "bpm": "96",
+    "description": "Nothing says \"It'll be okay\" quite like a ukulele.",
+    "feel": "Bouncy, Bright, Calming, Uplifting",
+    "uploaded": "2014-08-16",
+    "isrc": "USUAN1400037",
+    "collection": "17",
+    "sheetmusic": null,
+    "video": "https://youtu.be/sMcWOaJFuw0",
+    "itunes": "https://itunes.apple.com/us/album/carefree/id941913727?i=941913732",
+    "filmmusicURL": null
+  }
+}

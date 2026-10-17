@@ -1,0 +1,50 @@
+{
+  "file": "km-motivator.mp3",
+  "name": "Motivator · 企业励志",
+  "title": "Motivator",
+  "artist": "Kevin MacLeod",
+  "category": "企业励志",
+  "bpm": 126.0,
+  "tags": [
+    "企业",
+    "物流",
+    "工业",
+    "制造",
+    "商务",
+    "力量"
+  ],
+  "energy": "energetic",
+  "avoid_tags": [
+    "冥想"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100803",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Motivator.mp3",
+  "credit": "\"Motivator\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100803\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 237.82,
+  "start_seconds": 0,
+  "sha256": "f34e279c759a7bb0fdeb6cea0b5a4e6264d7677408fbb48ecf13f5c538d13478",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Motivator",
+    "filename": "Motivator.mp3",
+    "length": "00:03:58",
+    "instruments": "Bass, Drum Kit, Synths",
+    "genre": "19",
+    "bpm": "126",
+    "description": "Classic style corporate-presentation rock piece.",
+    "feel": "Bouncy, Bright, Driving, Uplifting",
+    "uploaded": "2011-03-07",
+    "isrc": "USUAN1100803",
+    "collection": null,
+    "sheetmusic": null,
+    "video": null,
+    "itunes": "https://itunes.apple.com/us/album/motivator/id945155155?i=945155164",
+    "filmmusicURL": null
+  }
+}

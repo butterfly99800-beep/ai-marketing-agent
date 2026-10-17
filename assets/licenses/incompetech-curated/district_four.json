@@ -1,0 +1,51 @@
+{
+  "file": "km-district_four.mp3",
+  "name": "District Four · 运动放克",
+  "title": "District Four",
+  "artist": "Kevin MacLeod",
+  "category": "运动放克",
+  "bpm": 176.0,
+  "tags": [
+    "运动",
+    "活力",
+    "城市",
+    "工业",
+    "力量",
+    "快节奏"
+  ],
+  "energy": "energetic",
+  "avoid_tags": [
+    "安静",
+    "温柔"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600039",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/District%20Four.mp3",
+  "credit": "\"District Four\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600039\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 248.24,
+  "start_seconds": 0,
+  "sha256": "b9ba021b1ac9632adc8cd67a99f001466b43b7e703b6eb2184e1ac225c9a9b79",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "District Four",
+    "filename": "District Four.mp3",
+    "length": "00:04:08",
+    "instruments": "Bass, Guitar, Organ, Percussion",
+    "genre": "8",
+    "bpm": "176",
+    "description": "Deep grooving crazy big percussion. Super danceable! High energy, without every getting the way. Useful for tech videos, badass characters, or general listenings! The download comes with all the parts separated out as well as a bonus track at 165 beats per minute (slightly slower and even deeper grooving!).",
+    "feel": "Aggressive, Bouncy, Grooving",
+    "uploaded": "2016-07-11",
+    "isrc": "USUAN1600039",
+    "collection": "11",
+    "sheetmusic": null,
+    "video": "https://youtu.be/yZX7eF_KClk",
+    "itunes": null,
+    "filmmusicURL": "https://incompetech.filmmusic.io/song/3662-district-four/"
+  }
+}

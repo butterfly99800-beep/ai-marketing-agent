@@ -1,0 +1,90 @@
+[
+  {
+    "title": "Apero Hour",
+    "category": "爵士餐饮",
+    "bpm": 140.0,
+    "duration_seconds": 283.04,
+    "sha256": "248e2bbd81c7f0bc69e4bd1ad95513e640e3eb474872acfd63b8805ed73ea9ea",
+    "id": "apero_hour"
+  },
+  {
+    "title": "Carefree",
+    "category": "轻快生活",
+    "bpm": 96.0,
+    "duration_seconds": 205.14,
+    "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+    "id": "carefree"
+  },
+  {
+    "title": "Cheery Monday",
+    "category": "轻快生活",
+    "bpm": 102.0,
+    "duration_seconds": 80.22,
+    "sha256": "841afe54871ec09fc0655ab4009222027c1679e17f653f82540dca4e98ebec3e",
+    "id": "cheery_monday"
+  },
+  {
+    "title": "District Four",
+    "category": "运动放克",
+    "bpm": 176.0,
+    "duration_seconds": 248.24,
+    "sha256": "b9ba021b1ac9632adc8cd67a99f001466b43b7e703b6eb2184e1ac225c9a9b79",
+    "id": "district_four"
+  },
+  {
+    "title": "Dream Culture",
+    "category": "温暖叙事",
+    "bpm": 70.0,
+    "duration_seconds": 214.36,
+    "sha256": "f12cbb52bd4b92bd6cf8a343645567c119627e9cbf98108a3eb6ac2cc275ee46",
+    "id": "dream_culture"
+  },
+  {
+    "title": "EDM Detection Mode",
+    "category": "科技动感",
+    "bpm": 128.0,
+    "duration_seconds": 365.69,
+    "sha256": "746f7b1d4dad9c949a67bc063e0ca79da34452c69cd98f4ab9c16a712e92e951",
+    "id": "edm_detection"
+  },
+  {
+    "title": "Electro Cabello",
+    "category": "时尚律动",
+    "bpm": 117.0,
+    "duration_seconds": 190.82,
+    "sha256": "f304151035c2647de56dbf1995dcc90f3c942c656edfe7516541e7b76e4044ef",
+    "id": "electro_cabello"
+  },
+  {
+    "title": "Envision",
+    "category": "冷静科技",
+    "bpm": 99.0,
+    "duration_seconds": 85.39,
+    "sha256": "089528a7df31e1714b0a645a885173c716b3d9389d13d1363fa2ac32d7a47009",
+    "id": "envision"
+  },
+  {
+    "title": "Life of Riley",
+    "category": "轻快生活",
+    "bpm": 102.0,
+    "duration_seconds": 235.36,
+    "sha256": "1916f05cd1860949f9241e17966d334c39852b531329e4a05802720bb154c564",
+    "id": "life_of_riley"
+  },
+  {
+    "title": "Motivator",
+    "category": "企业励志",
+    "bpm": 126.0,
+    "duration_seconds": 237.82,
+    "sha256": "f34e279c759a7bb0fdeb6cea0b5a4e6264d7677408fbb48ecf13f5c538d13478",
+    "id": "motivator"
+  },
+  {
+    "title": "Wallpaper",
+    "category": "科技商务",
+    "bpm": 92.0,
+    "duration_seconds": 220.06,
+    "sha256": "9fa810e5193c88f1b360537366f210f16c2588106d5292f0659e9957fa274f96",
+    "id": "wallpaper"
+  }
+]

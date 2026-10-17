@@ -1,0 +1,50 @@
+{
+  "file": "km-electro_cabello.mp3",
+  "name": "Electro Cabello · 时尚律动",
+  "title": "Electro Cabello",
+  "artist": "Kevin MacLeod",
+  "category": "时尚律动",
+  "bpm": 117.0,
+  "tags": [
+    "时尚",
+    "消费",
+    "活动",
+    "活力",
+    "年轻",
+    "旅行"
+  ],
+  "energy": "energetic",
+  "avoid_tags": [
+    "严肃"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400048",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Electro%20Cabello.mp3",
+  "credit": "\"Electro Cabello\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400048\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 190.82,
+  "start_seconds": 0,
+  "sha256": "f304151035c2647de56dbf1995dcc90f3c942c656edfe7516541e7b76e4044ef",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Electro Cabello",
+    "filename": "Electro Cabello.mp3",
+    "length": "00:03:11",
+    "instruments": "Drums, Ukulele, Trumpet, Trombone, Tenor Sax, Synths",
+    "genre": "6",
+    "bpm": "117",
+    "description": "Put all the happy things in a blender, and what do you get? Disco-Salsa-Ukulele-Melange.",
+    "feel": "Bouncy, Grooving",
+    "uploaded": "2014-11-15",
+    "isrc": "USUAN1400048",
+    "collection": "7",
+    "sheetmusic": null,
+    "video": "https://youtu.be/mFmkZOpUY3k",
+    "itunes": "https://itunes.apple.com/us/album/electro-cabello/id1103156406?i=1103156478",
+    "filmmusicURL": null
+  }
+}

@@ -1,0 +1,4 @@
+在本项目根目录使用Python3.12安装：
+python -m pip install --target .runtime/voice_deps -r requirements-voice.txt
+python scripts/setup_voice_models.py
+本机当前已安装并验证成功，无需重复执行。模型约326MB，音色包约54MB。

@@ -1,0 +1,110 @@
+免费商用真实配乐 · 新增曲目清单
+核验日期：2026-10-15
+
+本轮逐首导入11首Kevin MacLeod作品，非本项目程序合成。官方曲目元数据来自 https://incompetech.com/music/royalty-free/pieces.json ，逐曲官方页面列明CC BY 4.0。
+许可允许商业使用、剪辑与再分发，但必须保留作者、作品来源、许可链接，并标明修改；不得对底层CC音乐增加限制或暗示作者代言。
+官方许可：https://creativecommons.org/licenses/by/4.0/
+
+自动匹配：结合用户资料、风格、节奏和近期用曲优先选择真实作品；手动指定优先。配乐库可按风格筛选、试听。既有成片不自动替换，重新规划或选曲后更新生成。
+默认输出经过截取、循环、音量调整和淡入淡出。发布时请复制成片旁的“配乐署名”文件到发布说明；也可放入片尾/随片交付文档。不能署名时，请从作者官网获取相应付费许可。免费许可不保证平台绝不误报Content ID，保留逐曲凭证供申诉。
+
+Apero Hour | 爵士餐饮 | 140 BPM | 283.0秒
+匹配标签：餐饮、咖啡、酒店、生活方式、高级、爵士
+文件：km-apero_hour.mp3
+SHA256：248e2bbd81c7f0bc69e4bd1ad95513e640e3eb474872acfd63b8805ed73ea9ea
+"Apero Hour" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700070
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Carefree | 轻快生活 | 96 BPM | 205.1秒
+匹配标签：生活、亲切、服务、家庭、轻松
+文件：km-carefree.mp3
+SHA256：8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311
+"Carefree" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Cheery Monday | 轻快生活 | 102 BPM | 80.2秒
+匹配标签：服务、消费、教育、亲切、明亮
+文件：km-cheery_monday.mp3
+SHA256：841afe54871ec09fc0655ab4009222027c1679e17f653f82540dca4e98ebec3e
+"Cheery Monday" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700065
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+District Four | 运动放克 | 176 BPM | 248.2秒
+匹配标签：运动、活力、城市、工业、力量、快节奏
+文件：km-district_four.mp3
+SHA256：b9ba021b1ac9632adc8cd67a99f001466b43b7e703b6eb2184e1ac225c9a9b79
+"District Four" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600039
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Dream Culture | 温暖叙事 | 70 BPM | 214.4秒
+匹配标签：品牌、叙事、审美、温暖、美妆
+文件：km-dream_culture.mp3
+SHA256：f12cbb52bd4b92bd6cf8a343645567c119627e9cbf98108a3eb6ac2cc275ee46
+"Dream Culture" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300046
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+EDM Detection Mode | 科技动感 | 128 BPM | 365.7秒
+匹配标签：科技、发布、年轻、运动、快节奏、电子
+文件：km-edm_detection.mp3
+SHA256：746f7b1d4dad9c949a67bc063e0ca79da34452c69cd98f4ab9c16a712e92e951
+"EDM Detection Mode" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500026
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Electro Cabello | 时尚律动 | 117 BPM | 190.8秒
+匹配标签：时尚、消费、活动、活力、年轻、旅行
+文件：km-electro_cabello.mp3
+SHA256：f304151035c2647de56dbf1995dcc90f3c942c656edfe7516541e7b76e4044ef
+"Electro Cabello" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400048
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Envision | 冷静科技 | 99 BPM | 85.4秒
+匹配标签：科技、创新、软件、设计、探索、克制
+文件：km-envision.mp3
+SHA256：089528a7df31e1714b0a645a885173c716b3d9389d13d1363fa2ac32d7a47009
+"Envision" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900000
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Life of Riley | 轻快生活 | 102 BPM | 235.4秒
+匹配标签：教育、校园、生活、旅游、温暖
+文件：km-life_of_riley.mp3
+SHA256：1916f05cd1860949f9241e17966d334c39852b531329e4a05802720bb154c564
+"Life of Riley" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400054
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Motivator | 企业励志 | 126 BPM | 237.8秒
+匹配标签：企业、物流、工业、制造、商务、力量
+文件：km-motivator.mp3
+SHA256：f34e279c759a7bb0fdeb6cea0b5a4e6264d7677408fbb48ecf13f5c538d13478
+"Motivator" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100803
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+Wallpaper | 科技商务 | 92 BPM | 220.1秒
+匹配标签：科技、产品、软件、SaaS、商务、解说
+文件：km-wallpaper.mp3
+SHA256：9fa810e5193c88f1b360537366f210f16c2588106d5292f0659e9957fa274f96
+"Wallpaper" — Kevin MacLeod (incompetech.com)
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100843
+Licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/
+Changes in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.
+
+本轮保存位置：renderer/public/audio/km-*.mp3；分类目录assets/music-library.json；逐曲原始页面、官网元数据、SHA256、署名文件和许可全文位于assets/licenses/incompetech-curated/。风格分类是项目推荐标签，官方BPM来自作者元数据。

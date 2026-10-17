@@ -1,0 +1,64 @@
+最新曲库更新：新增11首作曲家真实作品，详见20_免费商用真实配乐清单.txt。现共23首可用，其中14首为作曲家作品、9首为项目合成器乐。自动选择优先真实作品；界面增加风格筛选。以下旧版数量记录仅作历史说明。
+
+音色、配乐与商业使用指南（2026-10-15核验）
+
+现在可用
+1. Kokoro v1.1-zh：7款中文、3款英文精选音色，已本地安装并逐个生成试听。中文含4女声、3男声，英文含2美式女声与1英式女声。用途标签是本项目的推荐分类，不是官方品质等级，最终可在“音色与配乐库”试听确认。默认优先选择本地开源音色，模型不可用不会伪装成已就绪。
+2. 配乐共12首可选：8首本次生成的原创器乐、原有原创氛围曲、Cipher，以及本次逐曲导入的 Inspired / Voice Over Under。原创器乐和新增转场音效不含第三方采样，没有第三方音乐购买步骤；不承诺音乐的排他性版权。
+3. 整片锁定一个音色。所有镜头配音先通过预检才提交付费图片/视频。云端失败时停止并提示整片更换，不再单镜头切成Windows音色。取消“配音”后不调用任何TTS，字幕与配乐可保留。已完成的片子修改音色、配音开关或画幅后点击“更新生成”，复用素材并保留旧版本文件。
+
+Kokoro授权
+模型卡标注Apache-2.0，运行库kokoro-onnx为MIT，无需申请付费账号即可按许可使用。模型卡、下载来源、SHA256和许可文本已保存在models/kokoro及assets/licenses。不要把“模型开源”理解成任何真人声音都能克隆商用：这里使用的是模型内置音色，没有擅自采集或克隆真人。
+https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh
+https://github.com/thewh1teagle/kokoro-onnx
+
+如果将整个软件打包分发，请同时处理依赖的许可义务：phonemizer / eSpeak NG含GPL许可组件，要保留许可并按适用条款提供相应源码。源码来源与许可文本已留存；不能只检查模型的Apache许可。
+https://github.com/bootphon/phonemizer/blob/master/LICENSE
+https://github.com/espeak-ng/espeak-ng/blob/master/COPYING
+
+CC BY音乐：免费商用，需要署名
+Inspired — Kevin MacLeod (incompetech.com).
+Licensed under CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600022
+Edited: trimmed and mixed in this video.
+
+Voice Over Under — Kevin MacLeod (incompetech.com).
+Licensed under CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
+Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600001
+Edited: trimmed and mixed in this video.
+
+Cipher — Kevin MacLeod (incompetech.com).
+Licensed under CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Edited: trimmed and mixed in this video.
+
+发布时把实际选中歌曲的署名放进视频说明/发布文案。成片提供“配乐署名”文件可下载。若客户要求不能署名，应联系作者购买适合用途的其他许可，或选本项目原创曲目。平台偶尔可能出现Content ID认领；保留许可、曲目页、下载日期和制作记录用于申诉，CC许可不等于永远不会被机器误判。
+https://incompetech.com/music/royalty-free/licenses/
+
+Pixabay / Mixkit：如何申请加入你的SaaS曲库
+这次没有整库抓取，也没有把历史Mixkit曲目继续放进自动可用池。公开视频使用许可与自动SaaS素材库授权不同，条款禁止或限制批量抓取、系统复制及向第三方提供库存式素材。
+步骤：
+1. 向平台官方联系渠道说明你的智能体用途、用户范围和商业模式，请对方确认适用许可。
+2. 明确申请：API/自动下载、服务端缓存、作为客户自动选曲库、客户商业成片、广告投放、跨平台发布、必要再许可，以及是否允许原始音频被试听/下载。
+3. 在书面许可范围、期限、地区、曲目和署名/Content ID处理方式明确后，再接入批量素材。不要把免费账号或个人单曲下载证书当整库自动化授权。
+4. 单曲合法下载也应留存曲目页、作者、许可版本、下载证书/日期；客户成片随附实际署名。
+https://pixabay.com/service/terms/
+https://pixabay.com/service/license-summary/
+https://mixkit.co/terms/
+https://mixkit.co/license/
+
+可复制的授权咨询文字：
+“我们开发AI营销视频制作工具，希望在服务端缓存指定音乐，供用户自动匹配并同步到其商业宣传片中。视频会交付客户并发布在抖音、YouTube等平台，也可能用于广告。请确认自动获取/缓存/素材库展示/试听/客户交付/跨平台广告及必要再许可是否获准，是否可提供API与书面授权，并说明费用、期限、地域、署名和Content ID处理办法。”
+
+Remotion引擎许可
+当前项目仍使用Remotion 4。官方许可对个人及不超过3名员工的营利组织提供免费使用范围；超出适用范围需公司许可，自动视频产品应查看Automators选项，具体以官方最新合同为准。本次没有购买、接受新合同或替你注册账户。
+https://www.remotion.dev/license
+https://www.remotion.dev/docs/license/pricing
+
+CosyVoice
+已核对官方代码/指定模型卡的许可信息，但这台机器本次实际部署的是CPU可运行的Kokoro。没有把未部署的CosyVoice显示为可选音色。后续若单独部署CosyVoice，应固定模型版本，并核对权重、内置音色和参考音频来源。
+https://github.com/QwenAudio/CosyVoice
+
+操作例子
+“抖音和YouTube都发，横版30秒，快节奏，无配音。”
+“保留竖版，改为中文男声10，使用工业推进配乐。”
+画幅、平台、秒数分别控制。一个画幅对应一版输出，多选平台共用这一版；另一个画幅可更新生成。旧成片的既有慢镜头不会因换音色自动重写，若想改节奏请发送“按新规则重新规划为快剪”，再点击开始生成。

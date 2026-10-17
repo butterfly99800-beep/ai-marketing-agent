@@ -1,0 +1,49 @@
+{
+  "file": "km-life_of_riley.mp3",
+  "name": "Life of Riley · 轻快生活",
+  "title": "Life of Riley",
+  "artist": "Kevin MacLeod",
+  "category": "轻快生活",
+  "bpm": 102.0,
+  "tags": [
+    "教育",
+    "校园",
+    "生活",
+    "旅游",
+    "温暖"
+  ],
+  "energy": "balanced",
+  "avoid_tags": [
+    "严肃"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400054",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Life%20of%20Riley.mp3",
+  "credit": "\"Life of Riley\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400054\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 235.36,
+  "start_seconds": 0,
+  "sha256": "1916f05cd1860949f9241e17966d334c39852b531329e4a05802720bb154c564",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Life of Riley",
+    "filename": "Life of Riley.mp3",
+    "length": "00:03:55",
+    "instruments": "Glockenspiel, Ukulele, Guitar, Percussion",
+    "genre": "16",
+    "bpm": "102",
+    "description": "Mid-tempo cheery music for all!",
+    "feel": "Bright, Relaxed, Uplifting",
+    "uploaded": "2014-11-25",
+    "isrc": "USUAN1400054",
+    "collection": null,
+    "sheetmusic": null,
+    "video": "https://youtu.be/npqWuio3Llg",
+    "itunes": null,
+    "filmmusicURL": null
+  }
+}

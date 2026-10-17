@@ -1,0 +1,50 @@
+{
+  "file": "km-envision.mp3",
+  "name": "Envision · 冷静科技",
+  "title": "Envision",
+  "artist": "Kevin MacLeod",
+  "category": "冷静科技",
+  "bpm": 99.0,
+  "tags": [
+    "科技",
+    "创新",
+    "软件",
+    "设计",
+    "探索",
+    "克制"
+  ],
+  "energy": "calm",
+  "avoid_tags": [
+    "亲子"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900000",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Envision.mp3",
+  "credit": "\"Envision\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900000\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 85.39,
+  "start_seconds": 0,
+  "sha256": "089528a7df31e1714b0a645a885173c716b3d9389d13d1363fa2ac32d7a47009",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Envision",
+    "filename": "Envision.mp3",
+    "length": "00:01:25",
+    "instruments": "Synths, Guitar",
+    "genre": "22",
+    "bpm": "99",
+    "description": "There is a mystery that is unfolding, unraveling, being solved, confounding, being thought about, being copied, demanding attention, delighting, comforting, and feeding the dog treats that look like sausages and get your hands all oily. Best for: Feature films where the protagonist thinks about a hard problem while walking at night in the neon-bathed entertainment district in Osaka in the rain in 1994.",
+    "feel": "Calming, Grooving, Mysterious",
+    "uploaded": "2019-04-05",
+    "isrc": "USUAN1900000",
+    "collection": "18",
+    "sheetmusic": null,
+    "video": "https://youtu.be/zo7ytWuCoQU",
+    "itunes": "https://itunes.apple.com/us/album/envision-single/1458670750?app=itunes",
+    "filmmusicURL": "https://incompetech.filmmusic.io/song/4706-envision/"
+  }
+}

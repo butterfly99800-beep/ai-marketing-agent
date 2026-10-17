@@ -1,0 +1,50 @@
+{
+  "file": "km-dream_culture.mp3",
+  "name": "Dream Culture · 温暖叙事",
+  "title": "Dream Culture",
+  "artist": "Kevin MacLeod",
+  "category": "温暖叙事",
+  "bpm": 70.0,
+  "tags": [
+    "品牌",
+    "叙事",
+    "审美",
+    "温暖",
+    "美妆"
+  ],
+  "energy": "calm",
+  "avoid_tags": [
+    "快节奏",
+    "工业"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300046",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dream%20Culture.mp3",
+  "credit": "\"Dream Culture\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300046\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 214.36,
+  "start_seconds": 0,
+  "sha256": "f12cbb52bd4b92bd6cf8a343645567c119627e9cbf98108a3eb6ac2cc275ee46",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Dream Culture",
+    "filename": "Dream Culture.mp3",
+    "length": "00:03:34",
+    "instruments": "Piano, Percussion",
+    "genre": "5",
+    "bpm": "70",
+    "description": "Dreamy watery piano bits over a tight percussion with some reverse effects to add to the dreamlike state of things.",
+    "feel": "Calming, Relaxed, Uplifting",
+    "uploaded": "2013-11-16",
+    "isrc": "USUAN1300046",
+    "collection": "16",
+    "sheetmusic": null,
+    "video": "https://youtu.be/dWYS_iQNZys",
+    "itunes": "https://itunes.apple.com/us/album/dream-culture/id941913727?i=941913757",
+    "filmmusicURL": null
+  }
+}

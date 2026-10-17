@@ -1,0 +1,64 @@
+幕言 · YouTube 发布与运营使用说明
+
+入口
+创作：http://localhost:8020/
+发布与运营：http://localhost:8020/operations.html
+Google OAuth 回调：http://localhost:8000/api/auth/youtube/callback
+双击项目中的“启动智能营销.cmd”，会同时维护8020工作台与8000回调服务。
+请统一使用localhost，不要在登录授权过程中切换为127.0.0.1，否则浏览器Cookie不相同。
+
+第一次使用
+1. 在普通Chrome或Edge浏览器打开发布与运营页面，创建你自己的工作台账号。
+   工作台账号不是Google账号，密码由你自己设置。第一个工作台账号接管本机原有作品；以后创建的其他账号不能查看这些作品。
+2. 在Google Cloud中选择存放OAuth客户端的同一个项目。
+   启用“YouTube Data API v3”和“YouTube Analytics API”。
+   OAuth同意屏幕处于Testing时，在Audience/受众的Test users/测试用户中加入准备绑定的Google账号。
+   OAuth客户端保持Web应用类型，已授权重定向URI必须完整包含：
+   http://localhost:8000/api/auth/youtube/callback
+   只配置localhost:8000或JavaScript来源不等于配置了完整重定向URI。
+3. 账号管理 → 绑定YouTube频道。由你在Google页面登录、选择频道并授予上传、频道只读和观看分析权限。
+   内嵌浏览器可能被Google拒绝登录，因此授权请在普通Chrome/Edge完成。
+4. Google回调后返回工作台。账号管理应显示真实频道名称，再刷新数据。
+
+发布
+在“内容发布”选择已完成成片，填写标题、发布说明、分类、受众和合成内容声明。
+选择私密/不公开/公开；也可定时公开（至少提前15分钟，定时任务由YouTube执行）。
+系统自动追加成片所用音乐的署名信息。
+核对顶部当前频道和发布表单，勾选确认后才会上传。不会因为宣传片制作完成就自动发布。
+发布记录显示上传进度、失败原因、恢复按钮和YouTube视频链接。
+上传中断时恢复同一个任务，利用已保存的Google resumable upload会话续传，避免重新上传同一内容。
+如果创建上传会话时连接中断、结果不明，系统不会自动建立新任务；请先在YouTube Studio核对。
+“上传完成”不等于YouTube转码已完成；视频实际可见性以Google返回值和YouTube Studio为准。
+
+运营
+数据概览：频道累计观看、订阅人数、视频数量、最近28天观看分钟和每日观看趋势。
+最近视频：真实观看、点赞、评论计数；支持继续加载。
+评论收件箱：频道评论、按视频筛选、继续加载。当前提供查看，不自动回复或删除评论。
+没有绑定、接口未开启、权限不足或无数据时显示真实空状态/错误，不生成假数据。
+Google分析数据可能延迟，报表范围使用最近已结算日期，不以今天的实时数承诺准确性。
+
+授权与上线
+OAuth客户端JSON从用户指定的YouTube目录读取，只在服务端使用；未复制到前端。
+本地会话使用HttpOnly Cookie；密码使用带随机盐的PBKDF2；Google授权令牌加密保存，Windows下加密密钥还受DPAPI保护。
+工作台账号、频道和发布任务按用户隔离，OAuth使用state和PKCE，授权状态一次有效。
+这是当前本机可运行版本，不能直接把localhost回调当作远程客户的线上回调。
+对外服务时需要部署HTTPS、公网域名、生产Cookie/主机策略、线上OAuth回调和客户端配置，完善隐私政策及数据删除流程，再完成Google所需验证/合规审核。
+Google测试模式的授权通常7天过期，需要重新绑定。未审核的API项目上传可能被限制为私密；代码无法替代Google平台审核。
+没有替你登录Google账号、接受授权或上传任何真实YouTube视频。真实绑定与首条上传仍需用户完成后联调。
+
+已验证
+86项测试通过，其中13项覆盖工作台账号、权限隔离、OAuth/PKCE、回调成功和重放拦截、令牌加密、发布确认、音乐署名、去重与完整字节断点上传。
+Google接口测试使用模拟响应，未将测试当作真实账号绑定成功。
+8000回调健康检查通过；已读取实际OAuth配置并核对完整回调URI。
+万相新提交首镜实际返回HTTP200且生成结果已下载，任务号保留在原项目中供复用。
+联网搜索能返回江苏科技大学计算机学院相关结果；学校官网与实际学院官网http://jisuanji.just.edu.cn/可读取正文。
+原来猜测的jsj/ jsjxy子域名不等于实际学院网址；现增加相关性筛选、多搜索源和安全HTTP正文回退。
+原万相错误被笼统提示遮蔽，无法还原当次具体响应；现已区分HTTP错误码、参数/鉴权错误、网络中断和结果不明，不再都提示“检查余额”。
+
+官方参考
+OAuth：https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps
+视频上传及未审核限制：https://developers.google.com/youtube/v3/docs/videos/insert
+断点续传：https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol
+频道分析：https://developers.google.com/youtube/analytics/reference/reports/query
+评论读取：https://developers.google.com/youtube/v3/docs/commentThreads/list
+测试用户及7天授权：https://support.google.com/cloud/answer/15549945

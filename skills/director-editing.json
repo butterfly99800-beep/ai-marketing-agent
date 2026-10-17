@@ -1,0 +1,38 @@
+{
+  "sources": [
+    "video-shotcraft",
+    "Remotion best practices"
+  ],
+  "composition_recipes": {
+    "full_bleed": "真实场景铺满；短标题叠加，适合情境钩子",
+    "editorial": "留白编辑版，主图与短标题分离，适合品牌/教育",
+    "split": "画面与核心卖点分列，适合密集产品界面",
+    "spotlight": "单主体框景，适合产品特写",
+    "collage": "三张已有素材错位入场；只在多样性/案例集合主题使用"
+  },
+  "rhythm": {
+    "default": "fast",
+    "typical_shot_seconds": [
+      2,
+      3,
+      4
+    ],
+    "opening": "前2秒明确主题",
+    "asset_policy": "最多6张新图片，其余asset_ref复用不同裁切或真实截图；不凭空换事实",
+    "transitions": "多数直接切，信息转折用短panel/push，品牌用短dissolve；不机械轮换"
+  },
+  "rules": [
+    "每镜一个具体信息点",
+    "同一主动作不超过全片一半",
+    "版式按内容选择，不全片模板套用",
+    "品牌收尾一次，字幕不得盖住主要内容",
+    "禁止无来源数字与假界面",
+    "不声称未经检测的精确卡拍"
+  ],
+  "priority": "用户要求的快节奏高于参考库的缓慢停留偏好",
+  "narrative_audio": {
+    "execution": "整片连续语音，剪辑切点不切断句子",
+    "writing": "先写完整广告段落，再让画面承担证据与节奏；不是每镜读一个标题",
+    "source": "https://support.google.com/google-ads/answer/14783551"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "file": "km-apero_hour.mp3",
+  "name": "Apero Hour · 爵士餐饮",
+  "title": "Apero Hour",
+  "artist": "Kevin MacLeod",
+  "category": "爵士餐饮",
+  "bpm": 140.0,
+  "tags": [
+    "餐饮",
+    "咖啡",
+    "酒店",
+    "生活方式",
+    "高级",
+    "爵士"
+  ],
+  "energy": "balanced",
+  "avoid_tags": [
+    "工业"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700070",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Apero%20Hour.mp3",
+  "credit": "\"Apero Hour\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700070\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 283.04,
+  "start_seconds": 0,
+  "sha256": "248e2bbd81c7f0bc69e4bd1ad95513e640e3eb474872acfd63b8805ed73ea9ea",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "Apero Hour",
+    "filename": "Apero Hour.mp3",
+    "length": "00:04:43",
+    "instruments": "Guitar, Bass, Drums, Organ",
+    "genre": "11",
+    "bpm": "140",
+    "description": "Cool jazz. I'm going to warn you now, that organ line gets stuck in your head really easily... like an icepick in a Marxist revolutionary. Too soon?",
+    "feel": "Bright, Grooving, Relaxed",
+    "uploaded": "2017-11-20",
+    "isrc": "USUAN1700070",
+    "collection": "14",
+    "sheetmusic": null,
+    "video": "https://youtu.be/sdjtt1dcBnk",
+    "itunes": "https://itunes.apple.com/us/album/apero-hour/1312683881?i=1312683884",
+    "filmmusicURL": "https://incompetech.filmmusic.io/song/3375-apero-hour/"
+  }
+}

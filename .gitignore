@@ -1,0 +1,9 @@
+.env
+*.env
+.runtime/
+work/
+renderer/node_modules/
+renderer/public/projects/
+__pycache__/
+models/kokoro/
+renderer/public/audio/

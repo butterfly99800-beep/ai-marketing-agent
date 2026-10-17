@@ -1,0 +1,51 @@
+{
+  "file": "km-edm_detection.mp3",
+  "name": "EDM Detection Mode · 科技动感",
+  "title": "EDM Detection Mode",
+  "artist": "Kevin MacLeod",
+  "category": "科技动感",
+  "bpm": 128.0,
+  "tags": [
+    "科技",
+    "发布",
+    "年轻",
+    "运动",
+    "快节奏",
+    "电子"
+  ],
+  "energy": "energetic",
+  "avoid_tags": [
+    "安静",
+    "纪实"
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500026",
+  "download_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/EDM%20Detection%20Mode.mp3",
+  "credit": "\"EDM Detection Mode\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1500026\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+  "enabled": true,
+  "attribution_required": true,
+  "origin": "artist_composed",
+  "instrumental": true,
+  "duration_seconds": 365.69,
+  "start_seconds": 0,
+  "sha256": "746f7b1d4dad9c949a67bc063e0ca79da34452c69cd98f4ab9c16a712e92e951",
+  "verified_at": "2026-10-15",
+  "official_metadata": {
+    "title": "EDM Detection Mode",
+    "filename": "EDM Detection Mode.mp3",
+    "length": "00:06:06",
+    "instruments": "Synths, Percussion",
+    "genre": "7",
+    "bpm": "128",
+    "description": "This is a sort of electronic music with a heavy backbeat and thumpin' bass. There is a significant change in theme at around 2 minutes - so if the beginning is a bit boring, you can start there. There is another fun change at around 3:30. If you didn't like the previous bits, just start there! I think you get the picture.",
+    "feel": "Driving",
+    "uploaded": "2015-04-15",
+    "isrc": "USUAN1500026",
+    "collection": "18",
+    "sheetmusic": null,
+    "video": "https://youtu.be/laHl-aFZUJI",
+    "itunes": "https://itunes.apple.com/us/album/edm-detection-mode/id1069337849?i=1069337855",
+    "filmmusicURL": "https://incompetech.filmmusic.io/song/3687-edm-detection-mode/"
+  }
+}

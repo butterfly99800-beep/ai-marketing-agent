@@ -1,0 +1,7 @@
+kokoro-onnx==0.6.1
+onnxruntime==1.31.0
+soundfile==0.14.0
+misaki-fork[zh]==0.9.6
+phonemizer==3.4.0
+espeakng-loader==0.2.4
+# 中文分词依赖由 misaki-fork[zh] 安装。

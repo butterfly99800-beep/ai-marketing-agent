@@ -107,7 +107,7 @@ Google 配置、账号绑定和 HTTPS 证书需要在服务器/Google 控制台�
 .venv/bin/python scripts/render_smoke.py
 ```
 
-这些检查不调用付费生成接口。GitHub Actions 在 Ubuntu 24.04/Python 3.12/Node 22 执行相同核心检查与浏览器安装预检，不使用私钥。
+这些检查不调用付费生成接口。`deploy/ci-ubuntu.example.yml` 是可选的 Ubuntu 24.04/Python 3.12/Node 22 GitHub Actions 模板（含实际渲染冒烟检查，不使用私钥）。当前推送 Token 没有 workflow 权限，所以没有启用自动 CI；需要时由拥有相应权限的维护者将它放入 `.github/workflows/ubuntu.yml`。
 部署后还需使用真实账号做一次制作和 OAuth 绑定验证。公开样片页面可先验证静态资源及视频播放。
 备份整个 `work/`（特别是 studio.sqlite 和加密密钥）、私有 `.env` 和 OAuth JSON，并存入私密备份位置；不要上传公共仓库。备份数据库前停止服务或使用 SQLite backup API，不能在写入时只复制单个数据库文件。
 

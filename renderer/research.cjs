@@ -5,7 +5,7 @@ const {safe}=require('./network-policy.cjs');
 (async()=>{
  const input=JSON.parse(fs.readFileSync(process.argv[2],'utf8')),out=process.argv[3];
  fs.mkdirSync(out,{recursive:true});
- const browser=await chromium.launch({headless:true,executablePath:process.env.VIDEO_BROWSER_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ const browser=await chromium.launch({headless:true,executablePath:process.env.VIDEO_BROWSER_PATH||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':chromium.executablePath())});
  try{
  const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1.5});page.setDefaultTimeout(8000);
  await page.route('**/*',async route=>{if(['document','stylesheet','script','image','font','xhr','fetch'].includes(route.request().resourceType())&&await safe(route.request().url()))await route.continue();else await route.abort()});

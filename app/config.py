@@ -22,3 +22,12 @@ MODEL=CONFIG.get('DEEPSEEK_MODEL','deepseek-flash')
 IMAGE_MODEL=CONFIG.get('WAN_IMAGE_MODEL','wan2.2-t2i-flash')
 VIDEO_MODEL=CONFIG.get('WAN_VIDEO_MODEL','wan2.2-i2v-flash')
 WAN_BASE=CONFIG.get('DASHSCOPE_BASE_URL','https://dashscope.aliyuncs.com').rstrip('/')
+
+PUBLIC_ORIGIN=os.getenv('PUBLIC_ORIGIN','').rstrip('/')
+ALLOWED_HOSTS={'localhost','127.0.0.1'}|{x.strip() for x in os.getenv('ALLOWED_HOSTS','').split(',') if x.strip()}
+if PUBLIC_ORIGIN:
+ from urllib.parse import urlsplit
+ origin=urlsplit(PUBLIC_ORIGIN)
+ if origin.scheme!='https' or not origin.hostname or origin.path or origin.query or origin.fragment:raise RuntimeError('PUBLIC_ORIGIN must be an HTTPS origin without path')
+ ALLOWED_HOSTS.add(origin.hostname)
+ALLOWED_ORIGINS={'http://localhost:8020','http://127.0.0.1:8020'}|({PUBLIC_ORIGIN} if PUBLIC_ORIGIN else set())

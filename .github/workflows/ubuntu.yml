@@ -1,0 +1,27 @@
+name: Ubuntu production checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: renderer/package-lock.json
+      - run: pip install --no-cache-dir -r requirements.lock.txt
+      - run: npm ci --no-audit --no-fund
+        working-directory: renderer
+      - run: npx playwright install --with-deps chromium
+        working-directory: renderer
+      - run: python -m unittest discover -s tests -q
+      - run: npm run typecheck
+        working-directory: renderer
+      - run: python scripts/check_deployment.py
+      - run: python scripts/render_smoke.py

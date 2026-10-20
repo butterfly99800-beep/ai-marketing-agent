@@ -1,4 +1,5 @@
-import time,asyncio,secrets
+import time,asyncio,secrets,os
+from app.config import PUBLIC_ORIGIN
 from datetime import date,timedelta
 from fastapi import APIRouter,Request,HTTPException
 from fastapi.responses import RedirectResponse,HTMLResponse,JSONResponse
@@ -14,10 +15,12 @@ class Credentials(BaseModel):
  password:str=Field(min_length=8,max_length=128)
 
 def logged_response(uid):
- response=JSONResponse({'ok':True});response.set_cookie('ops_session',auth.session(uid),httponly=True,samesite='lax',max_age=7*86400,path='/');return response
+ response=JSONResponse({'ok':True});response.set_cookie('ops_session',auth.session(uid),httponly=True,secure=bool(PUBLIC_ORIGIN),samesite='lax',max_age=7*86400,path='/');return response
 
 @router.post('/api/ops/register')
-async def register(req:Credentials):return logged_response(await asyncio.to_thread(auth.register,req.name,req.password))
+async def register(req:Credentials):
+ if os.getenv('ALLOW_REGISTRATION','1').lower() in ('0','false','no'):raise HTTPException(403,'自助注册未开放，请联系管理员。')
+ return logged_response(await asyncio.to_thread(auth.register,req.name,req.password))
 @router.post('/api/ops/login')
 async def login(req:Credentials,request:Request):return logged_response(await asyncio.to_thread(auth.login,req.name,req.password,request.client.host if request.client else 'local'))
 @router.post('/api/ops/logout')
@@ -30,7 +33,7 @@ async def logout(request:Request):
 async def who(request:Request):
  user=auth.current(request)
  try:_,redirect=yt.settings();configured=True
- except HTTPException:configured=False;redirect='http://localhost:8000/api/auth/youtube/callback'
+ except HTTPException:configured=False;redirect=os.getenv('YOUTUBE_REDIRECT_URI','http://localhost:8000/api/auth/youtube/callback')
  return {'user':user,'youtube_configured':configured,'redirect_uri':redirect,'local_workbench':True,'scope_names':['上传视频','读取频道与评论','读取观看数据'],'channels':yt.channels(user['id']) if user else [],'pending_binding':yt.pending_status(user['id']) if user else {'can_resume':False}}
 
 @router.post('/api/ops/youtube/connect')
@@ -42,14 +45,14 @@ async def youtube_callback(request:Request,state:str='',code:str='',error:str=''
   if error:raise HTTPException(400,'你已取消Google授权，可返回工作台重新绑定。')
   if not state or not code:raise HTTPException(400,'缺少Google授权参数。')
   auth.require(request);await yt.callback(request,state,code)
-  response=RedirectResponse('http://localhost:8020/operations.html?youtube=connected',status_code=303)
+  response=RedirectResponse((PUBLIC_ORIGIN or 'http://localhost:8020')+'/operations.html?youtube=connected',status_code=303)
  except HTTPException as e:
   from urllib.parse import urlencode
-  response=RedirectResponse('http://localhost:8020/operations.html?'+urlencode({'youtube':'failed','reason':str(e.detail)[:400]}),status_code=303)
+  response=RedirectResponse((PUBLIC_ORIGIN or 'http://localhost:8020')+'/operations.html?'+urlencode({'youtube':'failed','reason':str(e.detail)[:400]}),status_code=303)
  except Exception as exc:
   from urllib.parse import urlencode
   user=auth.current(request);reference=yt.note_failure(user['id'] if user else 'unknown','callback_unexpected',exc)
-  response=RedirectResponse('http://localhost:8020/operations.html?'+urlencode({'youtube':'failed','reason':'授权回调处理异常（'+type(exc).__name__+'），请重新绑定。参考号：'+reference}),status_code=303)
+  response=RedirectResponse((PUBLIC_ORIGIN or 'http://localhost:8020')+'/operations.html?'+urlencode({'youtube':'failed','reason':'授权回调处理异常（'+type(exc).__name__+'），请重新绑定。参考号：'+reference}),status_code=303)
  response.headers['Cache-Control']='no-store';response.headers['Referrer-Policy']='no-referrer';return response
 
 @router.post('/api/ops/youtube/resume-binding')

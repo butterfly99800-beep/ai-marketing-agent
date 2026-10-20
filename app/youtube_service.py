@@ -16,7 +16,7 @@ def settings():
  if len(files)!=1:raise HTTPException(503,'未找到唯一的YouTube OAuth客户端JSON，请检查YouTube配置目录。')
  try:data=json.loads(files[0].read_text(encoding='utf-8-sig'))['web']
  except Exception:raise HTTPException(503,'YouTube配置需要Web应用类型的OAuth客户端。')
- redirect='http://localhost:8000/api/auth/youtube/callback'
+ redirect=os.getenv('YOUTUBE_REDIRECT_URI','http://localhost:8000/api/auth/youtube/callback')
  if redirect not in data.get('redirect_uris',[]):raise HTTPException(503,'Google配置中缺少精确回调地址：'+redirect)
  if not data.get('client_id') or not data.get('client_secret'):raise HTTPException(503,'OAuth客户端配置不完整。')
  return data,redirect

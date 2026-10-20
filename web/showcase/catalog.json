@@ -1,0 +1,153 @@
+{
+  "notice": "用户授权公开的三条制作对话与最新成片。校园AI画面为示意，不代表官方招生宣传；网页展示数据按原片说明。",
+  "items": [
+    {
+      "id": "759fb97f-2ff5-4380-ab8b-cc9b19ed2d96",
+      "title": "在复旦，找到你的方向",
+      "revision": 1,
+      "video": "/showcase/759fb97f-2ff5-4380-ab8b-cc9b19ed2d96.mp4",
+      "poster": "/showcase/759fb97f-2ff5-4380-ab8b-cc9b19ed2d96.jpg",
+      "duration": 25.7,
+      "conversation": [
+        {
+          "role": "user",
+          "content": "帮我制作一个复旦大学的招生宣传片"
+        },
+        {
+          "role": "assistant",
+          "content": "我先确认三个关键点，再给你一版30秒、16:9的完整分镜。"
+        },
+        {
+          "role": "user",
+          "content": "这条片子主要给谁看？：高中学生与家长（本科招生）；最想突出哪个方向？：综合学科与学术实力；希望整体调性偏哪种？：青春明亮、节奏快。请生成一个最终方案。"
+        },
+        {
+          "role": "assistant",
+          "content": "我查了复旦官网的公开介绍页，片子按「高中生与家长视角 → 综合学科实力 → 青春明亮快节奏」来做，30 秒、16:9、YouTube。旁白用亲切的中文女声，音乐选用以校园、教育、温暖为标签的原创作品，整体是暖白与日光，最后用复旦红收尾；6 张 AI 示意画面配合重复利用同一素材的不同景别，共 10 个镜头，全部标注为概念示意图，不冒充真实校园实拍。\n\n已核对的依据：复旦简介页写明学校有 12 个学科门类、87 个本科专业、四个校区（邯郸、枫林、张江、江湾）与 17 家附属医院；首页“视觉复旦”栏出现校训“博学而笃志，切问而近思”。来源：[复旦简介](https://www.fudan.edu.cn/fdjj/list.htm)、[复旦大学官网首页](https://www.fudan.edu.cn/)。具体招生名额、分数线等未核实信息不在片中出现。\n\n确认无误后点“开始生成”。"
+        }
+      ],
+      "music_credit": "\"Life of Riley\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400054\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+      "sha256": "bb88d32b7f6b0c560cd4d2f44230f5cbdebcd97565464aa1ba3dd46ed4608157"
+    },
+    {
+      "id": "50fa438b-b5d7-492b-85c4-1728a8152d96",
+      "title": "DREWES · 从一票货到下一程",
+      "revision": 5,
+      "video": "/showcase/50fa438b-b5d7-492b-85c4-1728a8152d96.mp4",
+      "poster": "/showcase/50fa438b-b5d7-492b-85c4-1728a8152d96.jpg",
+      "duration": 37.46666666666667,
+      "conversation": [
+        {
+          "role": "user",
+          "content": "suiyizou.xyz/showcase制作这个网站的宣传片"
+        },
+        {
+          "role": "assistant",
+          "content": "DREWES（suiyizou.xyz/showcase）页面读完了：它把一体化货代平台分成「查海运比较 → 单证与运输协同 → 财务 → CRM → Agent → 增值服务」，并明确写着是产品体验版、运价为演示数据、船司品牌仅用于示例识别。\n\n方案：YouTube 16:9，30 秒，10 个快剪镜头（2–4 秒），走「现状碎片 → 一体化平台 → 真实页面 → 能力拆解 → 增值 → 品牌」的结构。视觉用暖纸白编辑感静物（磨砂纸、哑光铝合金、左上柔光），刻意避开科技蓝和港口空镜；旁白用中文男声产品讲解音色，配乐选 Wallpaper（科技商务，92 BPM，标签含软件/SaaS/解说，CC BY 需在发布说明署名）。\n\n素材：5 张新编排静物 + 你页面首页的真实截图（我只抓到一屏整页截图，用两种诚实裁切：纵向浏览、聚焦查海运区块）+ 1 个品牌收尾图形。不重画任何界面，不编造客户、资质与价格。收尾 CTA：预约服务演示。\n\n来源：[一体化货代服务 | DREWES](https://suiyizou.xyz/showcase)（已读正文；第三方搜索未找到该站的公开报道，页面自称产品体验版，价格与船司仅作示例）。确认后点「开始生成」即可。"
+        },
+        {
+          "role": "user",
+          "content": "希望你用真实的网页上的截图"
+        },
+        {
+          "role": "assistant",
+          "content": "按你的要求，成片只用页面上的真实截图，不改画任何界面。\n\n**主题**：DREWES 一体化货代平台——30 秒 YouTube 16:9 产品导览，从「同屏比价」切入，串起报价、订舱、单证、财务、客户经营、增值服务，最后落到「查海运像对话一样自然」。\n**受众**：正在评估货代 SaaS 的物流企业负责人与业务/操作主管。\n**画面**：网站只提供一页真实截图，我把它的不同区域做成多种诚实裁切——顶端主张、查海运方案列表、整页纵向浏览、报价/订舱、单证与财务、客户经营、增值服务卡片、对话式查海运；另配 1 张 AI 概念静物（纸单据+铝夹，仅示意「从散落到归位」，不出现界面、Logo、数字），收尾用页面原文能力标签做图形。\n**节奏**：10 个镜头，3 秒为主，含 1 个 2 秒、1 个 4 秒，共 30 秒；转场以直切为主，仅一次聚焦揭示和一次品牌溶解。\n**声音**：中文男声产品讲解音色；配乐 Wallpaper（科技商务，92 BPM，标签含软件/SaaS/解说，CC BY 4.0，署名写在交付说明里）。\n**取舍**：运价、船司、保险融资等一律按页面标注为示例/体验版，不宣称合作关系、不编造客户。收尾行动：预约服务演示。\n\n确认后点「开始生成」即可。"
+        },
+        {
+          "role": "user",
+          "content": "确定生成"
+        },
+        {
+          "role": "assistant",
+          "content": "分镜事实依据已重新对齐：每个镜头引用的文字都逐字取自 suiyizou.xyz/showcase 页面正文，收尾镜原引用含换行，改为页面原句「也可以像对话一样自然。」。其余内容与画面方案不变。\n\n**主题**：DREWES 一体化货代平台导览——从「从一票货物，到长期信赖」开场，经同屏比价、方案查询，串到报价订舱、单证协同、财务、客户经营、Agent 与增值服务，收尾落回「查海运，也可以像对话一样自然」。\n**受众**：正在评估货代 SaaS 的物流企业负责人与业务/操作主管。\n**画幅与时长**：YouTube 16:9，30 秒，10 个快剪镜头（1 个 2 秒、1 个 4 秒、其余 3 秒，合计 30 秒）。\n**画面**：只用你页面上的真实截图，不重画界面、不加 AI 概念图。因站点只有一屏整页截图，用整页纵向浏览加分区聚焦裁切拆出：开场主张、船司同屏比较、方案列表与费用、报价订舱、单证协同、财务、CRM、Agent、增值服务，收尾用页面原文标题做品牌图形。\n**声音**：中文男声产品讲解音色；配乐 Wallpaper（科技商务，92 BPM，含软件/SaaS/解说标签，CC BY 4.0，署名写入交付说明）。\n**边界**：页面自述产品体验版，运价与船司仅作示例识别，成片照此表达，不宣称合作关系、不编造客户与价格。\n**来源**：[一体化货代服务 | DREWES](https://suiyizou.xyz/showcase)（已读正文）。\n\n点击「开始生成」后开始制作。"
+        },
+        {
+          "role": "user",
+          "content": "请为当前成片准备YouTube发布文案"
+        },
+        {
+          "role": "assistant",
+          "content": "已为这支成片准备好发布文案。查看发布卡片后，点击确认即可上传；也可以继续告诉我需要调整的地方。"
+        },
+        {
+          "role": "user",
+          "content": "请自动准备YouTube发布文案，简介控制在100字左右，保留产品体验版和示例数据说明。"
+        },
+        {
+          "role": "assistant",
+          "content": "已为这支成片准备好发布文案。查看发布卡片后，点击确认即可上传；也可以继续告诉我需要调整的地方。"
+        },
+        {
+          "role": "user",
+          "content": "网页上的截图为啥只有一张图片，重新制作"
+        },
+        {
+          "role": "assistant",
+          "content": "明白了，之前只用到一屏截图，所以看起来“只有一张”。这次我重新把 showcase 页面按不同滚动位置抓了 6 张真实网页截图（顶部主张、平台能力、船司比较、方案列表、业务环节、底部查海运与增值服务），成片全部用这些真实截图，不重绘界面、不做 AI 概念图。\n\n**主题**：DREWES 一体化货代平台，30 秒 YouTube 16:9 产品导览。\n**结构**：11 个快剪镜头——首页主张（2 秒）→ 平台环节总览 → 船司同屏比较 → 方案列表 → 费用按柜列示 → 单证与运输协同 → 节点可见 → 对话式查海运 → 运价库体验 → 增值服务 → 品牌收尾（2 秒），合计严格 30 秒，以直切为主。\n**画面**：6 张不同滚动位置的真实截图，配合纵向浏览、聚焦框、图文并列等不同版式，不在同屏画面里反复打转。\n**声音**：中文男声产品讲解音色；配乐 Wallpaper（科技商务，92 BPM，软件/SaaS/解说标签，CC BY 4.0，署名写在交付说明）。\n**表达边界**：页面自述产品体验版、运价为演示数据、船司品牌仅用于识别，成片如实照说，不宣称合作与真实客户。\n**来源**：[一体化货代服务 | DREWES](https://suiyizou.xyz/showcase)（本轮共读取该页 6 个滚动视图，均未登录、未提交表单）。\n\n确认后点「开始生成」即可。"
+        },
+        {
+          "role": "user",
+          "content": "用不同页面和真实功能状态重新制作，旁白自然，音画一致，做好后准备YouTube发布文案。"
+        },
+        {
+          "role": "assistant",
+          "content": "本版按真实功能状态重新制作：方案比较、报价、订舱、单证、财务、客户经营和AI能力分别使用对应页面；完整句子与画面共用实测音频时间轴。"
+        },
+        {
+          "role": "user",
+          "content": "请为当前成片准备YouTube发布文案"
+        },
+        {
+          "role": "assistant",
+          "content": "已为这支成片准备好发布文案。查看发布卡片后，点击确认即可上传；也可以继续告诉我需要调整的地方。"
+        }
+      ],
+      "music_credit": "\"Envision\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900000\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+      "sha256": "5406b87080c6f81bab8b63792e2e6734c2bd918191a2d523c21974ebe40641b0"
+    },
+    {
+      "id": "f458e403-22c0-4251-bbac-990de5a67268",
+      "title": "江苏科技大学计算机学院招生宣传片",
+      "revision": 3,
+      "video": "/showcase/f458e403-22c0-4251-bbac-990de5a67268.mp4",
+      "poster": "/showcase/f458e403-22c0-4251-bbac-990de5a67268.jpg",
+      "duration": 30,
+      "conversation": [
+        {
+          "role": "user",
+          "content": "帮我生成一份江苏科技大学计算机学院的招生宣传片"
+        },
+        {
+          "role": "assistant",
+          "content": "30秒、16:9、抖音+YouTube、快剪，这些我记下了。我想先确认3件事再定稿；另外我先试了联网查学院官网，搜索引擎只返回了无关的江苏通用结果、校内站点也读取失败，所以目前没有任何可逐字引用的真实资料——涉及专业数量、就业率、实验室名称这类事实，我会等你给来源或按示意画面处理，绝不编造。"
+        },
+        {
+          "role": "user",
+          "content": "这支片子主要给谁看？：高考生和家长（本科招生）；30秒里最想让人记住什么？：专业与培养特色（课程、方向、实践）；画面素材怎么处理？：我提供学院真实照片或官网链接，用真实素材。请生成一个最终方案。"
+        },
+        {
+          "role": "assistant",
+          "content": "方案定稿（抖音/YouTube 通用 16:9，30 秒，10 个镜头，快剪）：\n\n· 主题线：从“高三怎么选专业”切入 → 走进学院环境 → 第一堂课与第一行代码 → 机房协作与实践项目 → 课程与方向并行 → 同伴与老师 → 收束在“代码起航”。面向高考生和家长，语气明亮、可信、不喊口号。\n· 画面：明亮自然光的校园摄影风格，浅暖白+雾灰基调、暖橙点缀，人物为示意学生；6 张新图 + 4 次同素材换景别复用（共 10 镜），转场以硬切为主，只在代码特写处用一次聚焦式转场，品牌收尾一次。\n· 声音：中文女声 02（亲切·教育），配乐 Daylight（116bpm 明亮生活感，适合家长向校园叙事，不冷硬）。\n· 事实边界：上一轮我尝试打开学校与学院官网均失败（DNS 校验/访问受限），搜索引擎也只返回江苏通用结果，因此这支片子不含任何专业数量、就业率、实验室名称、排名等未核实信息，人物与场景均为示意画面，不会冒充真实设施或学生。\n· 你说会提供学院真实照片或官网链接——把照片发给我，或给我一个能打开的官网/招生页面链接，我会把对应镜头替换成真实素材（真实网页按页面纵向浏览呈现），并在替换时逐字核对文案。\n\n下方方案可以点“开始生成”后制作。"
+        },
+        {
+          "role": "user",
+          "content": "请用真实官网信息"
+        },
+        {
+          "role": "assistant",
+          "content": "已修复：每一处事实都改成与所用页面逐字一致的原文引用——专业介绍页、认证新闻页、学院简介页、学院首页各自只引用本页文字，不再跨页拼接；同时把3秒镜头的旁白压到更短，符合快剪语速。\n\n**主题**：高考志愿怎么选 → 国家一流专业、工程教育认证、师资与就业、船舶工业软件特色。**受众**：高考生与家长。**风格**：暖米白＋浅灰蓝、暖橙点缀的明亮校园纪实感，16:9，抖音／YouTube 通用，30 秒 10 镜快剪。**声音**：中文女声 02（亲切·教育）；配乐 Life of Riley（102BPM，教育／校园标签，温暖轻快）。**素材**：4 张学院/学校官网真实页面截图 + 5 张示意画面 + 1 个品牌收尾版式；人物、实验室、码头均为示意，不冒充真实设施与企业，未实测流程不做展示。\n\n已读来源：[专业介绍](https://jisuanji.just.edu.cn/zyjs/list.htm)、[学院首页](https://jisuanji.just.edu.cn/)、[工程教育认证新闻](https://www.just.edu.cn/2023/0629/c11146a327368/page.htm)、[学院简介](https://jisuanji.just.edu.cn/xyjj/list.htm)。"
+        },
+        {
+          "role": "user",
+          "content": "这个画面跟图片都不一样而且都是一个模板"
+        },
+        {
+          "role": "assistant",
+          "content": "明白，问题出在画面：上一版把官网信息又用AI重画了一遍，所以每镜都像同一个模板。这一版改成直接用官网真实页面截图当画面——专业介绍、学院首页、工程教育认证新闻、学院简介四个页面都会出现，同一页面只通过不同区域裁切和不同版式复用，不再让AI改写页面。\n\n· 主题：填志愿怎么选 → 国家一流专业与工程教育认证 → 五个本科专业与省级船舶工业软件学院 → 邀请看专业介绍。\n· 受众：高考生和家长；16:9，抖音／YouTube 通用，30 秒 11 镜快剪。\n· 画面：10 个官网真实截图镜头（横移、纵览、聚焦、图文并列、框景各不相同，多数字幕让位给页面本身）＋ 1 张示意概念图（仅用于“写代码”抽象氛围，不冒充任何真实设施）＋ 1 个品牌收尾版式。所有文字均取自所引用页面原文。\n· 声音：中文女声 02（亲切·教育）整体连贯旁白；配乐 Cheery Monday（102BPM，教育／亲切／明亮标签，适合家长与学生共同观看，不冷硬）。\n\n下方方案确认后点“开始生成”再制作。"
+        }
+      ],
+      "music_credit": "\"Cheery Monday\" — Kevin MacLeod (incompetech.com)\nSource: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700065\nLicensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/\nChanges in generated videos: excerpted/looped, mixed under narration, volume adjusted and faded. No endorsement implied.",
+      "sha256": "f85dd347753ad438c7206f6ddfa6a1115808049681c12949761a4f370261c422"
+    }
+  ]
+}

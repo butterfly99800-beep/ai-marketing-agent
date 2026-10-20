@@ -6,7 +6,7 @@ const {safe}=require('./network-policy.cjs');
 (async()=>{
  const [url,out]=process.argv.slice(2);if(!await safe(url))throw Error('PUBLIC_URL_REQUIRED');
  fs.mkdirSync(out,{recursive:true});
- const browser=await chromium.launch({headless:true,executablePath:process.env.VIDEO_BROWSER_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ const browser=await chromium.launch({headless:true,executablePath:process.env.VIDEO_BROWSER_PATH||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':chromium.executablePath())});
  try{
  const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:2});
  await page.route('**/*',async route=>{if(await safe(route.request().url()))await route.continue();else await route.abort()});

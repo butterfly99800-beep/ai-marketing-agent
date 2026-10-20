@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse,JSONResponse,PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel,Field
 from app import store
-from app.config import ROOT,DATA,CONFIG,MODEL,IMAGE_MODEL,VIDEO_MODEL
+from app.config import ROOT,DATA,CONFIG,MODEL,IMAGE_MODEL,VIDEO_MODEL,PUBLIC_ORIGIN,ALLOWED_HOSTS,ALLOWED_ORIGINS
 from app.deepseek import DeepSeekProvider,ProviderError
 from app.director import DirectorAgent
 from app.schemas import Plan,VoiceId,MusicId,PlatformId
@@ -49,12 +49,12 @@ from app.chat_workspace import router as workspace_router
 app.include_router(workspace_router)
 @app.middleware('http')
 async def guard(request,call_next):
- if request.headers.get('host','').split(':')[0] not in ('localhost','127.0.0.1'):return JSONResponse({'error':'仅允许本机访问'},403)
- if request.method not in ('GET','HEAD','OPTIONS') and request.headers.get('origin') not in ('http://localhost:8020','http://127.0.0.1:8020'):return JSONResponse({'error':'请求来源无效'},403)
+ if request.headers.get('host','').split(':')[0] not in ALLOWED_HOSTS:return JSONResponse({'error':'仅允许本机访问'},403)
+ if request.method not in ('GET','HEAD','OPTIONS') and request.headers.get('origin') not in ALLOWED_ORIGINS:return JSONResponse({'error':'请求来源无效'},403)
  user=ops_auth.current(request)
  if user is None and (request.url.path.startswith('/api/projects') or request.url.path=='/api/uploads'):
   with ops_auth.db() as c:has_users=c.execute('SELECT COUNT(*) FROM ops_users').fetchone()[0]>0
-  if has_users:return JSONResponse({'error':'请先在发布与运营工作台登录，再访问你的作品。'},401)
+  if has_users or PUBLIC_ORIGIN:return JSONResponse({'error':'请先在发布与运营工作台登录，再访问你的作品。'},401)
  context=ops_auth.CURRENT_USER.set(user['id'] if user else None)
  try:response=await call_next(request)
  finally:ops_auth.CURRENT_USER.reset(context)

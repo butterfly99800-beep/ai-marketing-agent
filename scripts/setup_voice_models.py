@@ -12,9 +12,12 @@ def get(item):
    with file.with_suffix(file.suffix+'.part').open('wb') as out:
     for data in response.iter_bytes():out.write(data)
  file.with_suffix(file.suffix+'.part').replace(file);print('DOWNLOADED',name,file.stat().st_size,flush=True)
-with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+failures=[]
+with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
  for future in [pool.submit(get,i) for i in items.items()]:
   try:future.result()
-  except Exception as e:print('FAILED',type(e).__name__,str(e).split('For more')[0][:180],flush=True)
-manifest=[{'name':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in folder.iterdir() if p.is_file() and not p.name.endswith('.part')]
+  except Exception as e:failures.append(type(e).__name__);print('FAILED',type(e).__name__,str(e).split('For more')[0][:180],flush=True)
+manifest=[{'name':p.name,'bytes':p.stat().st_size,'sha256':hashlib.file_digest(p.open('rb'),'sha256').hexdigest()} for p in folder.iterdir() if p.is_file() and not p.name.endswith('.part')]
 (folder/'manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf8')
+
+if failures:raise SystemExit('Model setup incomplete; retry to resume.')

@@ -14,6 +14,6 @@ class SoundTests(unittest.TestCase):
   class Provider:
    async def converse(self,p):return {'reply':'方案','ready':True,'plan':{'title':'测试','voice':'Serena','music':'ambient'}}
   p={'messages':[],'revision':0}
-  with patch('app.director.store.save'):
+  with patch('app.director.store.save'),patch('app.audio_catalog.kokoro_ready',return_value=True):
    asyncio.run(DirectorAgent(Provider()).talk(p,'推荐',False,{'voice':None,'music':None}))
   self.assertEqual(p['voice'],'kokoro_zf_001')

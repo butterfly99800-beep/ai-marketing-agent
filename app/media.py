@@ -1,10 +1,10 @@
-import asyncio,ipaddress,socket,shutil,subprocess,json,wave,re
+import asyncio,ipaddress,socket,shutil,subprocess,json,wave,re,os
 from pathlib import Path
 from urllib.parse import urlsplit
 import httpx
 from app.config import ROOT,DATA
 from app.deepseek import ProviderError
-NODE=shutil.which('node') or r'D:\soft\node.exe'
+NODE=os.getenv('NODE_BINARY') or shutil.which('node') or (r'D:\soft\node.exe' if os.name=='nt' else 'node')
 def public_url(url):
  u=urlsplit(url)
  if u.scheme not in ('http','https') or not u.hostname or u.username or u.password or u.port not in (None,80,443):raise ProviderError('仅支持公开HTTP/HTTPS地址')
@@ -55,6 +55,7 @@ async def capture(project):
  if proc.returncode:raise ProviderError('网站截图失败，网站可能限制访问或地址不受支持。')
  return json.loads((directory/'site.json').read_text(encoding='utf-8'))
 def speak(text,path,seconds):
+ if os.name!='nt':raise ProviderError('Linux不支持Windows系统音色，请选择云端音色或安装Kokoro模型。')
  # Invoke a fixed local script; narration is UTF-8 data in a file, never shell code.
  source=path.with_suffix('.txt');source.write_text(text,encoding='utf-8-sig')
  command=['powershell.exe','-NoProfile','-ExecutionPolicy','Bypass','-File',str(ROOT/'renderer/speak.ps1'),str(source),str(path)]

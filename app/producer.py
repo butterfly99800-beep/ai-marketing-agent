@@ -1,4 +1,4 @@
-import asyncio,json,shutil,subprocess,hashlib,wave
+import asyncio,json,shutil,subprocess,hashlib,wave,os
 from pathlib import Path
 from PIL import Image
 import imageio_ffmpeg
@@ -51,10 +51,16 @@ class ProductionAgent:
     async def render_file(self,folder,props,filename):
         props_path=folder/(filename+'.json');props_path.write_text(json.dumps(props,ensure_ascii=False),encoding='utf-8')
         target=folder/filename
-        command=[NODE,str(ROOT/'renderer/node_modules/@remotion/cli/remotion-cli.js'),'render','src/index.tsx','AgentFilm',str(target),'--props',str(props_path),'--browser-executable',r'C:\Program Files\Google\Chrome\Application\chrome.exe','--concurrency','2','--log','info']
+        command=[NODE,str(ROOT/'renderer/node_modules/@remotion/cli/remotion-cli.js'),'render','src/index.tsx','AgentFilm',str(target),'--props',str(props_path),'--concurrency',os.getenv('RENDER_CONCURRENCY','2' if os.name=='nt' else '1'),'--log','info']
+        browser=os.getenv('VIDEO_BROWSER_PATH') or (r'C:\Program Files\Google\Chrome\Application\chrome.exe' if os.name=='nt' else None)
+        if not browser:
+            found=await asyncio.to_thread(subprocess.run,[NODE,'-e',"process.stdout.write(require('playwright').chromium.executablePath())"],cwd=ROOT/'renderer',capture_output=True,text=True,timeout=15)
+            if found.returncode:raise ProviderError('Chromium未安装，请运行部署安装脚本')
+            browser=found.stdout.strip()
+        command.extend(['--browser-executable',browser])
         if target.suffix=='.wav':command.extend(['--codec','wav'])
         frames=sum(s.get('duration_frames',round(s['duration']*30)) for s in props['project']['shots'])
-        timeout=max(600,min(1800,int(frames*1.2+120)))
+        timeout=int(os.getenv('RENDER_TIMEOUT_SECONDS',str(max(600,min(1800,int(frames*1.2+120))))))
         log_path=folder/(filename+'.render.log')
         with log_path.open('wb') as log:
             proc=await asyncio.create_subprocess_exec(*command,cwd=ROOT/'renderer',stdout=log,stderr=asyncio.subprocess.STDOUT)

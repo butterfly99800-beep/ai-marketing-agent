@@ -1,4 +1,5 @@
 from pathlib import Path
+import importlib.util,os
 from app.config import ROOT
 VOICE_PROFILES={}
 for code,name,gender,language,tags in [
@@ -16,9 +17,9 @@ for code,name,gender,language,tags in [
 for key,name,gender in [('Ethan','云端 Ethan','male'),('Cherry','云端 Cherry','female'),('Serena','云端 Serena','female'),('local','Windows 系统音色（兼容）','female')]:
  VOICE_PROFILES[key]={'name':name,'engine':'windows' if key=='local' else 'qwen','language':'multi','gender':gender,'tags':['兼容'],'license':'系统/服务商条款'}
 def kokoro_ready():
- return all((ROOT/'models/kokoro'/f).exists() for f in ('kokoro-v1.1-zh.onnx','voices-v1.1-zh.bin','config.json')) and (ROOT/'.runtime/voice_deps/kokoro_onnx').exists()
+ return all((ROOT/'models/kokoro'/f).exists() for f in ('kokoro-v1.1-zh.onnx','voices-v1.1-zh.bin','config.json')) and ((ROOT/'.runtime/voice_deps/kokoro_onnx').exists() or importlib.util.find_spec('kokoro_onnx') is not None)
 def voice_catalog():
- return {k:dict(v,available=kokoro_ready() if v['engine']=='kokoro' else k!='local',preview_url='/api/voices/'+k+'/preview') for k,v in VOICE_PROFILES.items()}
+ return {k:dict(v,available=kokoro_ready() if v['engine']=='kokoro' else (k!='local' or os.name=='nt'),preview_url='/api/voices/'+k+'/preview') for k,v in VOICE_PROFILES.items()}
 def select_voice(p):
  requested=(p.get('sound_preferences') or {}).get('voice')
  if requested in VOICE_PROFILES:return requested
@@ -27,4 +28,4 @@ def select_voice(p):
  content=' '.join(m.get('content','') for m in p.get('messages',[]) if m.get('role')=='user')
  english=sum('a'<=c.lower()<='z' for c in content)>sum('\u4e00'<=c<='\u9fff' for c in content)*2
  if kokoro_ready():return 'kokoro_af_maple' if english else 'kokoro_zm_010' if '男声' in content or any(x in content for x in ('物流','制造','工业')) else 'kokoro_zf_001'
- return proposed or 'Cherry'
+ return ('Ethan' if proposed.startswith('kokoro_zm_') else 'Cherry') if proposed and proposed.startswith('kokoro_') else proposed or 'Cherry'

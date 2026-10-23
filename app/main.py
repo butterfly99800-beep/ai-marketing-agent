@@ -1,4 +1,5 @@
 import asyncio,json,hashlib
+from pathlib import Path
 from contextlib import asynccontextmanager
 from uuid import UUID
 from typing import Literal
@@ -153,7 +154,13 @@ async def conversation(pid,capture_site=False):
   except asyncio.CancelledError:
    p['status']='interrupted';p['error']='服务停止，项目已保存。';store.save(p);raise
   except Exception as exc:
-   p['status']='draft';p['error']=str(exc) if isinstance(exc,ProviderError) else '处理未完成，请重试。';p.pop('pending_message',None);store.save(p)
+   if not isinstance(exc,ProviderError):
+    import logging,traceback,secrets
+    reference=secrets.token_hex(4)
+    frames=' > '.join(f'{Path(frame.filename).name}:{frame.lineno}:{frame.name}' for frame in traceback.extract_tb(exc.__traceback__))
+    logging.getLogger(__name__).error('Planning failure ref=%s type=%s frames=%s',reference,type(exc).__name__,frames)
+    p['error_reference']=reference
+   p['status']='draft';p['error']=str(exc) if isinstance(exc,ProviderError) else f'方案处理失败，请重试。诊断编号：{reference}';p.pop('pending_message',None);store.save(p)
 
 @app.post('/api/projects/{pid}/conversations',status_code=202)
 async def queue_chat(pid:str,req:Message):

@@ -9,7 +9,7 @@ from app import store
 from app.config import ROOT,DATA
 from app.ops_auth import db,initialize,digest,encrypt,decrypt
 
-SCOPES=['https://www.googleapis.com/auth/youtube.upload','https://www.googleapis.com/auth/youtube.readonly','https://www.googleapis.com/auth/yt-analytics.readonly']
+SCOPES=['https://www.googleapis.com/auth/youtube.force-ssl','https://www.googleapis.com/auth/youtube.upload','https://www.googleapis.com/auth/youtube.readonly','https://www.googleapis.com/auth/yt-analytics.readonly']
 TASKS=set();LOCKS={}
 def settings():
  folder=Path(os.getenv('YOUTUBE_CONFIG_DIR',str(ROOT.parent/'YouTube')));files=list(folder.glob('*.json'))
@@ -141,7 +141,7 @@ async def callback(request,state,code):
   raise HTTPException(502,'Google令牌交换响应异常，请重新绑定。参考号：'+reference) from exc
  token['expires_at']=time.time()+token.get('expires_in',3600)-60
  granted=set(token.get('scope','').split())
- if not set(SCOPES).issubset(granted):raise HTTPException(400,'授权缺少上传、频道只读或数据分析权限，请重新绑定并勾选全部所需权限。')
+ if not set(SCOPES).issubset(granted):raise HTTPException(400,'授权缺少评论访问、上传、频道只读或数据分析权限，请重新绑定并勾选全部所需权限。')
  pending_table()
  with db() as c:c.execute('INSERT INTO ops_oauth_pending VALUES(?,?,?) ON CONFLICT(owner) DO UPDATE SET token=excluded.token,expires=excluded.expires',(owner,encrypt(token),time.time()+7*86400))
  await complete_binding(owner,token)

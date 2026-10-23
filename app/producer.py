@@ -57,7 +57,7 @@ class ProductionAgent:
             found=await asyncio.to_thread(subprocess.run,[NODE,'-e',"process.stdout.write(require('playwright').chromium.executablePath())"],cwd=ROOT/'renderer',capture_output=True,text=True,timeout=15)
             if found.returncode:raise ProviderError('Chromium未安装，请运行部署安装脚本')
             browser=found.stdout.strip()
-        command.extend(['--browser-executable',browser])
+        command.extend(['--browser-executable',browser,'--chrome-mode','headless-shell' if 'headless_shell' in Path(browser).name or 'headless-shell' in Path(browser).name else 'chrome-for-testing'])
         if target.suffix=='.wav':command.extend(['--codec','wav'])
         frames=sum(s.get('duration_frames',round(s['duration']*30)) for s in props['project']['shots'])
         timeout=int(os.getenv('RENDER_TIMEOUT_SECONDS',str(max(600,min(1800,int(frames*1.2+120))))))

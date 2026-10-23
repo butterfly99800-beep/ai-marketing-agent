@@ -34,7 +34,7 @@ async def who(request:Request):
  user=auth.current(request)
  try:_,redirect=yt.settings();configured=True
  except HTTPException:configured=False;redirect=os.getenv('YOUTUBE_REDIRECT_URI','http://localhost:8000/api/auth/youtube/callback')
- return {'user':user,'youtube_configured':configured,'redirect_uri':redirect,'local_workbench':True,'scope_names':['上传视频','读取频道与评论','读取观看数据'],'channels':yt.channels(user['id']) if user else [],'pending_binding':yt.pending_status(user['id']) if user else {'can_resume':False}}
+ return {'registration_open':os.getenv('ALLOW_REGISTRATION','1').lower() not in ('0','false','no'),'user':user,'youtube_configured':configured,'redirect_uri':redirect,'local_workbench':True,'scope_names':['上传视频','读取频道与评论','读取观看数据'],'channels':yt.channels(user['id']) if user else [],'pending_binding':yt.pending_status(user['id']) if user else {'can_resume':False}}
 
 @router.post('/api/ops/youtube/connect')
 async def connect(request:Request):return {'url':yt.authorization(request,auth.require(request))}

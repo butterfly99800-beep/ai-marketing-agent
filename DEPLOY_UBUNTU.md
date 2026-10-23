@@ -112,3 +112,19 @@ Google 配置、账号绑定和 HTTPS 证书需要在服务器/Google 控制台�
 备份整个 `work/`（特别是 studio.sqlite 和加密密钥）、私有 `.env` 和 OAuth JSON，并存入私密备份位置；不要上传公共仓库。备份数据库前停止服务或使用 SQLite backup API，不能在写入时只复制单个数据库文件。
 
 参考：[Uvicorn 部署](https://www.uvicorn.org/deployment/)；[Remotion 并发选项](https://www.remotion.dev/docs/options)。
+
+
+## 登录恢复与注册开关
+
+本地 Windows 账号数据库不会随 Git 部署。云端需创建账号。忘记密码或不确定账号是否存在时，以服务用户 ubuntu 执行：
+
+```bash
+cd /home/ubuntu/ai-marketing-agent
+.venv/bin/python scripts/recover_operator.py
+```
+
+输入账号名与两次新密码；账号不存在则创建，存在则只重置密码并注销旧会话，保留作品和频道归属。不要使用 sudo 执行该脚本，不要删除 work 数据库。
+
+`.env` 中 `ALLOW_REGISTRATION=0` 关闭自助注册；需要开放时改为 `1`，再执行 `sudo systemctl restart ai-marketing-agent`。开放注册的用户可使用服务的模型额度，应按实际使用范围决定。修改密码无需重启。
+
+对话接口的 HTTP 401 表示尚未登录或会话过期，不代表 DeepSeek 网络故障。

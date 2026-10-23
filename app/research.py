@@ -22,7 +22,11 @@ async def run_browser(p,action,**kwargs):
  folder=DATA/p['id'];folder.mkdir(exist_ok=True,parents=True)
  token=uuid.uuid4().hex;request=folder/f'research-{token}.json';result_file=f'research-result-{token}.json'
  request.write_text(json.dumps(dict(action=action,id=token,result_file=result_file,**kwargs),ensure_ascii=False),encoding='utf-8')
- proc=await asyncio.create_subprocess_exec(NODE,str(ROOT/'renderer/research.cjs'),str(request),str(folder),stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
+ try:
+  proc=await asyncio.create_subprocess_exec(NODE,str(ROOT/'renderer/research.cjs'),str(request),str(folder),stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
+ except OSError as exc:
+  request.unlink(missing_ok=True)
+  raise ProviderError('网页浏览器无法启动：服务找不到或无法执行 Node.js，请在服务器 .env 中设置 NODE_BINARY 为 Node.js 的绝对路径并重启服务。') from exc
  try:
   await asyncio.wait_for(proc.communicate(),85)
   if proc.returncode:raise ProviderError('浏览器读取失败，页面可能限制访问或需要验证。')

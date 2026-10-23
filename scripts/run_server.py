@@ -6,6 +6,14 @@ if (root/'.env').exists():
  for raw in (root/'.env').read_text(encoding='utf-8-sig').splitlines():
   match=re.match(r"^([A-Z_][A-Z0-9_]*)=(.*)$",raw.strip())
   if match:os.environ.setdefault(match[1],match[2].strip().strip('\"\''))
+# Chromium/Crashpad must not write to the read-only home in systemd.
+if sys.platform.startswith('linux'):
+ os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH',str(Path.home()/'.cache/ms-playwright'))
+ for key,subdir in [('XDG_CONFIG_HOME','config'),('XDG_CACHE_HOME','cache')]:
+  folder=root/'work/browser-runtime'/subdir
+  folder.mkdir(parents=True,exist_ok=True,mode=0o700)
+  os.environ[key]=str(folder)
+
 if __name__=='__main__':
  import uvicorn
  uvicorn.run('app.main:app',host='127.0.0.1',port=8020,workers=1,proxy_headers=True,forwarded_allow_ips='127.0.0.1',access_log=False)

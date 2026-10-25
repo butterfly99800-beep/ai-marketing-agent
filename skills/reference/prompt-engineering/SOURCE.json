@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/kzhekov/Prompt-Engineering-Skill",
+  "revision": "702afdbc873cf271958b3518d320abc7db25d9bc",
+  "usage": "Reference documents only; scripts are not executed or loaded into model context."
+}

@@ -34,7 +34,7 @@ asset_ref只指向更早的同类image/website镜头，不引用graphic；复用
 
 <剪辑执行>
 render_style=content_directed。platforms可以多选，画幅只服从aspect_ratio，绝不由抖音或YouTube推断横竖。总镜头参考时长严格等于target_duration；每镜2–10秒，全片15–60秒、3–30镜。30秒快节奏通常9–12镜，重点信息留3–4秒，品牌2–3秒，按内容分配，不全部等长。用户要舒缓则降低切换密度。
-参考editing_skills中的Remotion与video-shotcraft能力，用内容决定镜头，scene选page_reveal/detail_track/row_embed/section_wipe/parallel_compare/brand_recall。至少3种有理由的composition，collage最多一次。不是固定顺序；无对比证据不用parallel_compare，无表格行不用row_embed。
+参考editing_skills中video-shotcraft已实现的镜头映射，用内容决定镜头，scene选page_reveal/detail_track/row_embed/section_wipe/parallel_compare/brand_recall。至少3种有理由的composition，collage最多一次。不是固定顺序；无对比证据不用parallel_compare，无表格行不用row_embed。
 motion从schema选，page_scroll只用于网站；列表优先正视、split或局部聚焦，避免全片倾斜。cut为主，动作/视线/信息或音乐短句处切换，重点处适量dissolve/push；iris最多一次，避免逐页PPT转场。hold_seconds 0.5–2，关键信息和品牌至少1秒，动作在停留前结束。focal_x/y来自主体位置，避免盲裁。
 色板继承品牌或素材，foreground/background对比充分，文字少而可读；不默认科技蓝黑、不添加固定“AI生成示例”角标，不在字幕里放实现细节。
 默认video=false；只有video_budget=true且动作确有价值才用最多2段5秒视频，source=image、duration=5，总视频占比≤40%。至少2个image/website镜头。graphic仅品牌收尾或有原文步骤的workflow，graphic_labels为2–4个原文标签。
@@ -77,3 +77,7 @@ video_budget=true表示用户希望成片实际含少量AI视频，不只是允�
 </成片实测反馈>
 
 中段有连续旁白且画面已清楚表达内容时，show_title=false，不必每镜再叠大标题把视频做成PPT。主标题只用于开场主张、必要信息点和品牌收尾。品牌收尾layout=auto，不要把品牌做成workflow按钮列表。视频主体动作优先full_bleed，避免缩在一张小图片框里；镜头内已有真实主体动作时不再叠加无意义推拉。
+
+<剪辑策略切换：video-shotcraft>
+本Agent的创意与剪辑手法来源统一为video-shotcraft。Remotion只是渲染引擎，不是要模仿的剪辑风格。按creative_context.editing_skills.supported_techniques中已实现的映射选镜头：单主角建立→推进→落定、真实页面2.5D、满足真实坐标条件的row-embed、简洁品牌记忆点。只借鉴适合当前内容的动作语法，不照搬Ink Press顺序、字体色板或其他品牌，不宣称全套124张卡已实现。普通镜头以cut交接，用主体、视线、动作或信息关系决定切点；只有叙事需要才给其他转场，不能按镜头编号轮流用push/panel。快速剪辑也必须让动作走完、文字可读、品牌停留。
+</剪辑策略切换：video-shotcraft>

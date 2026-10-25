@@ -1,7 +1,6 @@
 {
   "sources": [
-    "video-shotcraft",
-    "Remotion best practices"
+    "video-shotcraft"
   ],
   "composition_recipes": {
     "full_bleed": "真实场景铺满；短标题叠加，适合情境钩子",
@@ -17,9 +16,9 @@
       3,
       4
     ],
-    "opening": "前2秒明确主题",
+    "opening": "开场主体至少3秒，先建立再动作，结束留静止",
     "asset_policy": "最多6张新图片，其余asset_ref复用不同裁切或真实截图；不凭空换事实",
-    "transitions": "多数直接切，信息转折用短panel/push，品牌用短dissolve；不机械轮换"
+    "transitions": "默认直切；有明确段落关系才用一次层次揭示，品牌柔和收束；不按前一个转场机械轮换"
   },
   "rules": [
     "每镜一个具体信息点",
@@ -29,7 +28,9 @@
     "禁止无来源数字与假界面",
     "不声称未经检测的精确卡拍",
     "镜头动作来自主体与内容，不复制其他项目品牌、口号和URL",
-    "AI动态选项开启时必须规划实际5秒视频镜头，视频层不能被拼贴布局隐藏"
+    "AI动态选项开启时必须规划实际5秒视频镜头，视频层不能被拼贴布局隐藏",
+    "一个镜头一个主动作，移动完成后真正停住，不持续尾漂",
+    "只选择supported_techniques中已经实现的映射，不能声称全部124张镜头卡均已接入"
   ],
   "priority": "用户要求的快节奏高于参考库的缓慢停留偏好",
   "narrative_audio": {
@@ -41,5 +42,45 @@
     "reference_card": "spotlight-hero-card",
     "adapted": "单主角、推进、落定停留；用户不需要轮廓扫描，移除装饰框，不宣称完整复刻剧场卡",
     "dynamic_media": "首帧image_prompt与主体动作video_prompt分开；字幕切点不切断动作"
-  }
+  },
+  "editing_profile": "video-shotcraft",
+  "render_engine": "Remotion（仅负责渲染，不作为创意手法来源）",
+  "selection_policy": "按主体、资料证据和镜头目的选已实现手法，不固定轮换、随机套卡或照搬Ink Press整片模板。",
+  "supported_techniques": [
+    {
+      "method": "单主角推进与落定",
+      "reference": "spotlight-hero-card（改编）",
+      "controls": {
+        "motion": "focus / push / orbit",
+        "composition": "spotlight / full_bleed"
+      },
+      "scope": "建立→非线性推进→静止；不复制装饰框、扫描光或整套剧场特效"
+    },
+    {
+      "method": "真实页面2.5D运镜",
+      "reference": "video-shotcraft PageCam",
+      "controls": {
+        "scene": "page_reveal / detail_track / section_wipe"
+      },
+      "requires": "真实截图及页面坐标，密集文字保持可读"
+    },
+    {
+      "method": "行嵌入",
+      "reference": "row-embed",
+      "controls": {
+        "scene": "row_embed"
+      },
+      "requires": "截图真实TR regions，按原配方错峰/12f飞行/4f落定，不凭空造行"
+    },
+    {
+      "method": "品牌记忆点",
+      "reference": "video-shotcraft审美规则R1/Q5",
+      "controls": {
+        "scene": "brand_recall",
+        "motion": "brand",
+        "layout": "auto"
+      },
+      "scope": "单一主体，品牌落定至少1秒，不做按钮菜单或多卡群舞"
+    }
+  ]
 }

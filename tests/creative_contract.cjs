@@ -14,3 +14,10 @@ const sentence='今天想画的小图，刚刚想到的几句话，都可以随�
 const seen=[];for(let t=0;t<10;t+=.02){const part=phraseAt(sentence,0,10,t,true);if(seen.at(-1)!==part)seen.push(part);if(part.replace(/[，。！？；,.!?;]/g,'').length>14)throw Error('Vertical caption too long');if(/^[，。！？；,.!?;]+$/.test(part))throw Error('Orphan punctuation caption');}
 if(seen.join('')!==sentence)throw Error('Caption phrase dropped text');
 console.log('PASS: caption phrases fit vertical safe area and preserve sentence text');
+
+const {shotcraftProgress}=load('renderer/src/shotcraft.ts');
+if(shotcraftProgress(0,120,30)!==0||shotcraftProgress(8,120,30)!==0)throw Error('Missing establishing hold');
+if(shotcraftProgress(90,120,30)!==1||shotcraftProgress(119,120,30)!==1)throw Error('Camera still drifts after landing');
+const auto=planTransitions(Array.from({length:5},()=>({source:'image',asset_kind:'ai_image',motion:'focus',transition:'auto'})));
+if(auto.some(t=>t.kind!=='cut'))throw Error('Automatic decorative transition rotation returned');
+console.log('PASS: shotcraft establish/move/hold phases and content-led direct cuts');

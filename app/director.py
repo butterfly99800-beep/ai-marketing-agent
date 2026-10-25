@@ -14,7 +14,7 @@ class DirectorAgent:
   store.save(p)
   from app.creative import director_context,audit_plan
   p['creative_context']=director_context(p)
-  p['production_version']=3
+  p['production_version']=3;p['editing_profile']='video-shotcraft'
   reply=await self.provider.converse(p)
   if reply['ready'] and reply['plan'] and p.get('target_duration'):
    from app.planning import fit_duration

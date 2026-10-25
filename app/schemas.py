@@ -10,6 +10,7 @@ class Shot(BaseModel):
  title:str=Field(min_length=1,max_length=32)
  narration:str=Field(min_length=1,max_length=64)
  image_prompt:str=Field(min_length=1,max_length=1800)
+ video_prompt:str|None=Field(default=None,max_length=1200)
  duration:int=Field(ge=2,le=10)
  asset_ref:int|None=Field(default=None,ge=0,le=29)
  scene:Literal['page_reveal','detail_track','row_embed','section_wipe','parallel_compare','brand_recall']|None=None

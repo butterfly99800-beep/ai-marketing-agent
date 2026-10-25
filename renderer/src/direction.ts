@@ -144,7 +144,7 @@ export function camera(motion:string,p:number,site:boolean,W:number,H:number){
   case 'pan':return `translateX(${(p-.5)*W*.07}px) scale(1.10)`;
   case 'orbit':return `perspective(1800px) rotateY(${-7+7*p}deg) rotateX(${2-2*p}deg) scale(${.97+.03*p})`;
   case 'rise':return `translateY(${(1-p)*H*.06}px) scale(${1.08-.04*p})`;
-  case 'focus':return 'scale(1)';
+  case 'focus':return `scale(${1+.12*p})`; // Subject-guided push then true hold; no decorative focus rectangle.
   case 'page_scroll':return 'none';
   case 'split':return `translateY(${(1-p)*24}px)`;
   default:return `scale(${site?1+.025*p:1.01+.09*p})`;

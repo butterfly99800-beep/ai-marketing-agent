@@ -128,7 +128,7 @@ class ProductionAgent:
                     if not record.get('video_task'):
                         if record.get('video_submission')=='pending':raise ProviderError('上次视频提交结果不明，为避免重复扣费已停止。请核对服务商任务后再制作新方案。')
                         record['video_submission']='pending';store.save(p)
-                        record['video_task']=await tracked_submit(wan,p,record,'video',shot['image_prompt']+'。主体缓慢自然运动，镜头稳定。',vertical,image);record['video_submission']='confirmed';record['video_model']=VIDEO_MODEL;store.save(p)
+                        record['video_task']=await tracked_submit(wan,p,record,'video',shot.get('video_prompt') or (shot['image_prompt']+'。保持原图主体与场景一致，一个主体完成自然连续的可见动作，镜头稳定，不添加文字或新物体。'),vertical,image);record['video_submission']='confirmed';record['video_model']=VIDEO_MODEL;store.save(p)
                     if not video.exists():await download(await wan.result(record['video_task']),video)
                     record['kind']='ai_video';event(p,f'镜头{i+1}五秒视频已生成')
             public=ROOT/'renderer/public/projects'/pid/f'rev{p["revision"]}';public.mkdir(parents=True,exist_ok=True)

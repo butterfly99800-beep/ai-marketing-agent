@@ -10,3 +10,8 @@ def fit_duration(plan,seconds):
   shot=min(candidates,key=lambda s:s['duration']) if delta>0 else max(candidates,key=lambda s:s['duration'])
   step=1 if delta>0 else -1;shot['duration']+=step;delta-=step
  return Plan.model_validate(result).model_dump()
+
+
+def require_dynamic_scene(plan,enabled):
+ if enabled and not any(s.get('video') for s in plan.get('shots',[])):
+  raise ValueError('用户已勾选AI动态画面，请安排至少1段5秒video=true的image镜头；最多2段且不超过总片长40%。截图不能伪造成AI视频。若仅真实网页的约束无法兼容，应说明冲突而不是静默返回纯静态方案。')

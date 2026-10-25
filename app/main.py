@@ -185,7 +185,7 @@ def render_options(p,req=None):
  def value(key,default):
   incoming=getattr(req,key,None) if req is not None else None
   return incoming if incoming is not None else p.get(key,default)
- return {'aspect_ratio':value('aspect_ratio','16:9' if p.get('platform')=='youtube' else '9:16'),'narration_enabled':value('narration_enabled',True),'platforms':value('platforms',[]),'voice':value('voice',(p.get('plan') or {}).get('voice','kokoro_zf_001')),'music':value('music',(p.get('plan') or {}).get('music','ambient')),'bgm':value('bgm',True)}
+ return {'allow_video':bool(req.allow_video) if req is not None else bool(p.get('video_budget',False)),'aspect_ratio':value('aspect_ratio','16:9' if p.get('platform')=='youtube' else '9:16'),'narration_enabled':value('narration_enabled',True),'platforms':value('platforms',[]),'voice':value('voice',(p.get('plan') or {}).get('voice','kokoro_zf_001')),'music':value('music',(p.get('plan') or {}).get('music','ambient')),'bgm':value('bgm',True)}
 
 def copy_render_assets(source,target):
  import shutil
@@ -204,6 +204,7 @@ async def render(pid:str,req:Confirm):
  if project(pid)['status'] in ('planning','capturing'):raise HTTPException(409,'当前项目正在分析，请稍候')
  async with lock(pid):
   p=project(pid)
+  if req.allow_video and not any(s.get('video') for s in (p.get('plan') or {}).get('shots',[])):raise HTTPException(409,'当前方案没有AI动态镜头，请先按动态选项重新规划，再确认制作。')
   unchanged=render_options(p)==render_options(p,req)
   if p['status']=='completed' and req.revision==p['revision'] and unchanged:return p
   if not p['plan'] or req.revision!=p['revision']:raise HTTPException(409,'方案已变更，请确认当前方案')

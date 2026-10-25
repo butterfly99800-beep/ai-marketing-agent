@@ -56,6 +56,8 @@ class DeepSeekProvider:
       explicit_repeat=any(re.search(r'沿用上一|保持上一|和上一.*一样|复用同一',m.get('content','')) for m in p.get('messages',[])[-2:] if m.get('role')=='user')
       if audit['matches_recent'] and not explicit_repeat:raise ValueError('与近期镜头顺序和配乐完全重复，请按当前内容重新策划；用户指定项保持')
      if reply.plan:
+      from app.planning import require_dynamic_scene
+      require_dynamic_scene(reply.plan.model_dump(),p.get('video_budget',False))
       web_shots=[s for s in reply.plan.shots if s.source=='website']
       available=len((p.get('site') or {}).get('pages',[]))
       if available>=3 and len(web_shots)>=3 and len({s.screenshot_index for s in web_shots})<3:raise ValueError('已抓到多个网站画面，请按内容匹配至少3个不同的截图索引，不能整片重复首屏')

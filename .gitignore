@@ -56,3 +56,6 @@ examples/*_分镜.json
 !renderer/public/audio/original-sfx-soft.wav
 !renderer/public/audio/original-sfx-transition.wav
 !renderer/public/audio/voice_over_under.mp3
+
+# Local Remotion bundler cache
+.cache/

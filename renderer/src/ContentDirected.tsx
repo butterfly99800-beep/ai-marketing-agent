@@ -34,7 +34,7 @@ export function ContentScene({shot,index,project}:{shot:any;index:number;project
     })}
    </PageCam>
   </div>
-  <div style={{position:'absolute',left:38,top:22,padding:'10px 16px',borderRadius:8,background:'#f5f7faed',color:accent,fontSize:32,opacity:intro}}>{meta.label||shot.title}</div>
+  {shot.show_title!==false&&<div style={{position:'absolute',left:38,top:22,padding:'10px 16px',borderRadius:8,background:'#f5f7faed',color:accent,fontSize:32,opacity:intro}}>{meta.label||shot.title}</div>}
   <div style={{position:'absolute',bottom:0,height:170,left:0,right:0,background:'linear-gradient(0deg,#f5f7fa 72%,#f5f7fa00)'}}/>
   <div style={{position:'absolute',left:48,bottom:26,fontSize:32,color:'#75828e'}}></div>
  </div></AbsoluteFill>;

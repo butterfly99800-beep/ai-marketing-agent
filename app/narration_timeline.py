@@ -9,7 +9,7 @@ async def prepare_measured(p,folder,voice_id):
  if not beats or not p.get('narration_enabled',True):return False
  shots=p['plan']['shots'];order=[i for b in beats for i in b['shot_indices']]
  if order!=list(range(len(shots))):raise ValueError('每个镜头必须按顺序绑定到一句旁白，不能遗漏或重复')
- signature=hashlib.sha256(json.dumps(['measured-v1',beats,voice_id],ensure_ascii=False,sort_keys=True).encode()).hexdigest();track=p.get('narration_track') or {};path=folder/'narration.wav'
+ signature=hashlib.sha256(json.dumps(['measured-v2-minimum-shots',beats,voice_id,[(s.get('duration'),s.get('video'),s.get('motion')) for s in shots]],ensure_ascii=False,sort_keys=True).encode()).hexdigest();track=p.get('narration_track') or {};path=folder/'narration.wav'
  if track.get('signature')==signature and path.exists() and p.get('render_timeline'):return True
  chunks=[];cues=[];timeline=[];segments=[];sample_rate=24000;cursor=0
  # Every sentence uses the same voice. A sentence is never clipped to a shot.
@@ -20,13 +20,16 @@ async def prepare_measured(p,folder,voice_id):
    samples=w.readframes(w.getnframes());frames=w.getnframes()
   pre=round((.18 if n==0 else .08)*sample_rate);pause=round(float(beat.get('pause_after',.4))*sample_rate)
   tail=1.2 if n==len(beats)-1 else 0
-  block=pre+frames+pause+round(tail*sample_rate);end=math.ceil((cursor+block)/sample_rate*FPS)/FPS;block=round(end*sample_rate)-cursor
+  indices=beat['shot_indices']
+  minimums=[round((5 if shots[i].get('video') else 3 if i==0 else 1 if shots[i].get('motion')=='brand' else 2)*FPS) for i in indices]
+  block=max(pre+frames+pause+round(tail*sample_rate),round(sum(minimums)/FPS*sample_rate));end=math.ceil((cursor+block)/sample_rate*FPS)/FPS;block=round(end*sample_rate)-cursor
   chunks.append(bytes(pre*2)+samples+bytes((block-pre-frames)*2))
   start=(cursor+pre)/sample_rate;stop=start+frames/sample_rate
   cues.append({'text':beat['text'],'start':start,'end':stop,'shot_indices':beat['shot_indices']})
   start_frame=round(cursor/sample_rate*FPS);total_frames=round(block/sample_rate*FPS);indices=beat['shot_indices'];weights=[shots[i]['duration'] for i in indices];used=0
+  extra=max(0,total_frames-sum(minimums))
   for k,i in enumerate(indices):
-   next_used=total_frames if k==len(indices)-1 else round(total_frames*sum(weights[:k+1])/sum(weights))
+   next_used=total_frames if k==len(indices)-1 else sum(minimums[:k+1])+round(extra*sum(weights[:k+1])/sum(weights))
    timeline.append({'index':i,'from':start_frame+used,'duration_frames':next_used-used,'beat_index':n});used=next_used
   segments.append({'sentence':n,'text':beat['text'],'start_sample':cursor+pre,'sample_count':frames,'start_frame':start_frame,'duration_frames':total_frames,'shot_indices':indices});cursor+=block
  if cursor/sample_rate>60:raise ValueError('自然语速旁白超过60秒，请精简整句；不会裁断或强行加速')

@@ -64,10 +64,16 @@ motion从schema选，page_scroll只用于网站；列表优先正视、split或�
 </预算计数>
 
 <层级边界>
-plan对象允许的字段仅为：narration_beats,render_style,voiceover_script,title,cta,style,voice,music,creative,audience,rationale,shots。shots元素允许的字段仅为：title,narration,image_prompt,video_prompt,duration,asset_ref,scene,region_index,composition,motion,source,layout,graphic_labels,screenshot_index,purpose,transition,focal_x,focal_y,hold_seconds,video,evidence。narration_enabled、platforms、aspect_ratio、target_duration属于输入配置，不要作为plan新字段输出。
+plan对象允许的字段仅为：narration_beats,render_style,voiceover_script,title,cta,style,voice,music,creative,audience,rationale,shots。shots元素允许的字段仅为：title,show_title,narration,image_prompt,video_prompt,duration,asset_ref,scene,region_index,composition,motion,source,layout,graphic_labels,screenshot_index,purpose,transition,focal_x,focal_y,hold_seconds,video,evidence。narration_enabled、platforms、aspect_ratio、target_duration属于输入配置，不要作为plan新字段输出。
 </层级边界>
 
 <动态画面选择与镜头手法>
 video_budget=true表示用户希望成片实际含少量AI视频，不只是允许预算。应在动作最能增加信息的1个镜头安排video=true、duration=5、source=image；最多2段，总比例不超过40%，不可用asset_ref复用视频。video_prompt单独描述起始状态→一个可见主体动作→结束状态，例如手拿起笔或翻开一页；image_prompt只描述首帧构图，不能把两种提示混为一谈。视频不能只有静帧缩放。video_prompt明确自然主体动作，如手拿起物件、翻一页、人物走入场景；避免只有“镜头缓慢移动”的伪动态。网站真实UI继续用截图和代码运镜；如果用户要求只用真实网页且不允许概念视频，应说明冲突而不伪造。video_budget=false时全部video=false。
 参考video-shotcraft的单主角、完整动作弧和落定停留：focus靠主体取景+推进+停住表达，不画无意义矩形描边。每镜只让一种运动做主角，避免反复同一种镜头。先按来源和用途选择手法，真实页面保持文字清晰；禁止复制其他项目的品牌、口号、URL或固定装饰框。
 </动态画面选择与镜头手法>
+
+<成片实测反馈>
+旁白用能被理解和看见的表达，避免“让今天有新的位置”这类无实际含义的修辞。每个视频镜头优先单独绑定一个完整旁白句，约20–30个中文字，给主体动作完整5秒；不要用一个很短的句子同时覆盖5秒视频和多个额外镜头。开场主体至少3秒，其他信息镜头至少2秒，品牌落定至少1秒。自然音频较长时可延长画面，不通过压缩视频动作来硬对齐短句。
+</成片实测反馈>
+
+中段有连续旁白且画面已清楚表达内容时，show_title=false，不必每镜再叠大标题把视频做成PPT。主标题只用于开场主张、必要信息点和品牌收尾。品牌收尾layout=auto，不要把品牌做成workflow按钮列表。视频主体动作优先full_bleed，避免缩在一张小图片框里；镜头内已有真实主体动作时不再叠加无意义推拉。

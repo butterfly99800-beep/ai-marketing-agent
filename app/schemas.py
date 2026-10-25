@@ -8,6 +8,7 @@ PlatformId=Literal['douyin','youtube','shorts','xiaohongshu','bilibili','instagr
 class Shot(BaseModel):
  model_config=ConfigDict(extra='forbid')
  title:str=Field(min_length=1,max_length=32)
+ show_title:bool=True
  narration:str=Field(min_length=1,max_length=64)
  image_prompt:str=Field(min_length=1,max_length=1800)
  video_prompt:str|None=Field(default=None,max_length=1200)

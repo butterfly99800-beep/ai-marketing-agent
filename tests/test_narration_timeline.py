@@ -27,3 +27,15 @@ class MeasuredTimelineTests(unittest.IsolatedAsyncioTestCase):
   with patch('app.narration_timeline.SpeechProvider.generate',new_callable=AsyncMock) as generate:
    with self.assertRaises(ValueError):await prepare_measured(p,Path('.'),'kokoro_zm_011')
    generate.assert_not_called()
+
+ async def test_short_narration_never_truncates_five_second_action(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   p={'plan':{'shots':[{'duration':3},{'duration':5,'video':True},{'duration':2}],'narration_beats':[{'text':'选择。','shot_indices':[0],'pause_after':.3},{'text':'拿起笔。','shot_indices':[1,2],'pause_after':.3}]},'assets':{}}
+   async def generate(text,path,seconds,voice):
+    with wave.open(str(path),'wb') as w:w.setnchannels(1);w.setsampwidth(2);w.setframerate(24000);w.writeframes(bytes(24000))
+    return .5
+   with patch('app.narration_timeline.SpeechProvider.generate',AsyncMock(side_effect=generate)),patch('app.narration_timeline.store.save'):
+    await prepare_measured(p,Path(tmp),'Ethan')
+   self.assertGreaterEqual(p['render_timeline'][0]['duration_frames'],90)
+   self.assertGreaterEqual(p['render_timeline'][1]['duration_frames'],150)
+   self.assertGreaterEqual(p['render_timeline'][2]['duration_frames'],60)

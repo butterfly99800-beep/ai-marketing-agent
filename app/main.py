@@ -39,13 +39,19 @@ async def lifespan(app):
    job.update(status='uncertain' if job['status']=='starting' else 'interrupted',error='服务重启，上传会话已保留，请在工作台恢复任务。');youtube_service.save_job(job)
  for p in store.listing():
   if p['status'] in ('producing','planning','capturing'):p['status']='interrupted';p['error']='服务已重启，确认重试会复用已提交任务和素材。';store.save(p)
+ from app.social_publish import worker as social_worker
+ social_task=asyncio.create_task(social_worker())
  try:yield
  finally:
+  social_task.cancel()
+  await asyncio.gather(social_task,return_exceptions=True)
   await youtube_service.shutdown()
   for task in list(TASKS):task.cancel()
   if TASKS:await asyncio.gather(*list(TASKS),return_exceptions=True)
 app=FastAPI(title='对话式宣传片Agent',lifespan=lifespan)
 app.include_router(operations_router)
+from app.social_publish import router as social_router
+app.include_router(social_router)
 from app.chat_workspace import router as workspace_router
 app.include_router(workspace_router)
 @app.middleware('http')
@@ -317,6 +323,10 @@ def music_preview(track:str):
 def media_license_guide():
  return FileResponse(ROOT/'19_音色与配乐授权指南.txt',media_type='text/plain',filename='audio-license-guide.txt')
 
+@app.get('/')
+async def publishing_home():return FileResponse(ROOT/'web/publisher.html')
+@app.get('/studio')
+async def creative_studio():return FileResponse(ROOT/'web/index.html')
 app.mount('/',StaticFiles(directory=ROOT/'web',html=True),name='web')
 
 

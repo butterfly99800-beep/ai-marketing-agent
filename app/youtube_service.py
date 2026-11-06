@@ -265,6 +265,7 @@ async def upload(owner,jid):
      status={'privacyStatus':job['privacy'],'selfDeclaredMadeForKids':job['made_for_kids'],'containsSyntheticMedia':job['contains_synthetic_media']}
      if job.get('publish_at'):status['publishAt']=job['publish_at']
      body={'snippet':{'title':job['title'],'description':job['description'],'categoryId':job['category_id']},'status':status}
+     if job.get('tags'):body['snippet']['tags']=job['tags']
      job.update(status='starting');save_job(job)
      try:r=await c.post('https://www.googleapis.com/upload/youtube/v3/videos',params={'uploadType':'resumable','part':'snippet,status'},headers=dict(headers,**{'X-Upload-Content-Type':'video/mp4','X-Upload-Content-Length':str(size)}),json=body)
      except httpx.HTTPError:job.update(status='uncertain',error='上传会话创建结果不明，请先核对YouTube Studio后再建立新任务，防止重复上传。');save_job(job);return

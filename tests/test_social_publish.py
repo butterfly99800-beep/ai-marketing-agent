@@ -35,10 +35,10 @@ class SocialTests(unittest.IsolatedAsyncioTestCase):
   await self.c.post('/api/ops/logout');r=await self.c.get('/api/ops/social/platforms');self.assertEqual(r.status_code,401)
  async def test_rejects_fake_video(self):
   r=await self.c.post('/api/ops/social/upload?filename=bad.mp4',content=b'not a video');self.assertEqual(r.status_code,400)
- async def test_queue_distinct_works_six_hours_apart_and_dedup(self):
+ async def test_distinct_works_do_not_shift_each_others_start_and_dedup(self):
   a=self.draft(sha='same');b=self.draft(sha='different');c=self.draft(sha='same')
   x=await self.post_schedule(a);y=await self.post_schedule(b);self.assertEqual(x.status_code,200,x.text);self.assertEqual(y.status_code,200,y.text)
-  self.assertAlmostEqual(y.json()[0]['due']-x.json()[0]['due'],21600,places=0)
+  self.assertLess(abs(y.json()[0]['due']-x.json()[0]['due']),5)
   self.assertEqual((await self.post_schedule(c)).status_code,409)
   self.assertEqual((await self.post_schedule(a)).status_code,409)
  async def test_unconfigured_platform_is_not_dispatched(self):
@@ -53,7 +53,7 @@ class SocialTests(unittest.IsolatedAsyncioTestCase):
  async def test_dispatch_is_claimed_once_and_sends_keywords(self):
   d=self.draft();r=await self.post_schedule(d);item=r.json()[0];item['due']=time.time()-2
   with store.connection() as c:c.execute('UPDATE social_queue SET due=?,payload=? WHERE id=?',(item['due'],json.dumps(item),item['id']))
-  with patch.object(yt,'create_job',return_value={'id':'job-one','status':'queued'}) as create,patch.object(yt,'launch') as launch:
+  with patch.object(yt,'create_job',return_value={'id':'job-one','status':'queued'}) as create,patch.object(yt,'launch') as launch,patch.object(yt,'job_get',return_value={'id':'job-one','status':'queued'}):
    await social.tick();await social.tick();create.assert_called_once();launch.assert_called_once();self.assertEqual(create.call_args.args[1]['tags'],['ocean freight'])
  async def test_prompt_validation_limits(self):
   raw={'posts':[dict(platform='x',title='Shipping',caption='x'*241,keywords=['freight'],hashtags=[])]}
@@ -61,5 +61,41 @@ class SocialTests(unittest.IsolatedAsyncioTestCase):
   raw['posts'][0]['caption']='Ocean freight tips';self.assertEqual(len(social.validate_posts(raw,['x'])),1)
  async def test_default_home_is_publishing(self):
   r=await self.c.get('/');self.assertIn('publisher.js',r.text)
+
+ async def recurring(self,total=2):
+  d=self.draft();form=self.form(d);form['repeat_count']=total
+  with patch.object(yt,'channels',return_value=[{'id':'a'*32}]):r=await self.c.post('/api/ops/social/schedule',json=form)
+  self.assertEqual(r.status_code,200,r.text);item=r.json()[0];item.update(due=time.time()-1,status='submitted',youtube_job_id='job-1');social.update_item(item);return item
+
+ async def test_same_work_repeats_after_six_hours_then_finishes(self):
+  item=await self.recurring();first_due=item['due']
+  with patch.object(yt,'job_get',return_value={'id':'job-1','status':'uploaded','url':'https://www.youtube.com/watch?v=test'}):await social.tick()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0]
+  self.assertEqual(row['status'],'scheduled');self.assertEqual(row['completed_count'],1);self.assertEqual(row['project_id'],item['project_id']);self.assertEqual(row['due'],first_due+21600)
+  row['due']=time.time()-1;social.update_item(row)
+  with patch.object(yt,'create_job',return_value={'id':'job-2','status':'queued'}) as create,patch.object(yt,'launch'):
+   await social.tick();self.assertEqual(create.call_args.args[1]['project_id'],item['project_id']);self.assertEqual(create.call_args.args[1]['social_occurrence_id'],item['id']+':2')
+  with patch.object(yt,'job_get',return_value={'id':'job-2','status':'uploaded'}):await social.tick();await social.tick()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'completed');self.assertEqual(row['completed_count'],2)
+
+ async def test_stopping_submitted_loop_keeps_current_upload_and_prevents_next(self):
+  item=await self.recurring(0);r=await self.c.post('/api/ops/social/queue/'+item['id']+'/cancel');self.assertEqual(r.status_code,200)
+  with patch.object(yt,'create_job') as create:await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'stopped');self.assertEqual(row['youtube_job_id'],'job-1')
+
+ async def test_uncertain_result_does_not_start_another_repeat(self):
+  await self.recurring(0)
+  with patch.object(yt,'job_get',return_value={'id':'job-1','status':'uncertain'}),patch.object(yt,'create_job') as create:await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['completed_count'],0);self.assertEqual(row['status'],'submitted')
+
+ async def test_missed_slots_do_not_create_a_burst(self):
+  item=await self.recurring(0);item['due']=time.time()-20*3600;social.update_item(item)
+  with patch.object(yt,'job_get',return_value={'id':'job-1','status':'uploaded'}),patch.object(yt,'create_job') as create:await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertGreater(row['due'],time.time());self.assertEqual(row['completed_count'],1)
+
+ async def test_x_rejects_repeat_but_allows_single(self):
+  d=self.draft(platform='x');form=self.form(d);form['repeat_count']=0
+  self.assertEqual((await self.c.post('/api/ops/social/schedule',json=form)).status_code,400)
+  form['repeat_count']=1;self.assertEqual((await self.c.post('/api/ops/social/schedule',json=form)).status_code,200)
 
 if __name__=='__main__':unittest.main()

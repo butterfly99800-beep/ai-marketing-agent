@@ -143,6 +143,7 @@ class Schedule(BaseModel):
  connection_id:str=Field(default='',max_length=32)
  start_at:datetime
  interval_hours:int=Field(default=6,ge=1,le=168)
+ repeat_count:int=Field(default=1,ge=0,le=1000)
  privacy:str=Field(default='private',pattern='^(private|unlisted|public)$')
  made_for_kids:bool
  contains_synthetic_media:bool
@@ -157,24 +158,20 @@ async def schedule(req:Schedule,request:Request):
  if not row:raise HTTPException(404,'文案不存在')
  draft=json.loads(row[0]);p=owned(uid,draft['project_id']);selected=set(req.platforms);posts=[x for x in draft['posts'] if x['platform'] in selected]
  if {x['platform'] for x in posts}!=selected:raise HTTPException(400,'所选平台缺少文案')
+ if 'x' in selected and req.repeat_count!=1:raise HTTPException(400,'X 不支持相同内容自动循环发布，请选择仅发布一次或移除 X')
  if 'youtube' in selected and not any(x['id']==req.connection_id for x in yt.channels(uid)):raise HTTPException(400,'请先绑定并选择 YouTube 频道')
  if draft['revision']!=p['revision']:raise HTTPException(409,'作品已更新，请重新生成文案')
  rows=[]
  with store.LOCK,store.connection() as c:
   due=req.start_at.timestamp()
-  # A six-hour cadence belongs to a queue of distinct works, not reposting one.
-  for post in posts:
-   account=req.connection_id if post['platform']=='youtube' else 'pending'
-   last=c.execute("SELECT MAX(due) FROM social_queue WHERE owner=? AND platform=? AND account=? AND status IN ('scheduled','awaiting_authorization')",(uid,post['platform'],account)).fetchone()[0]
-   if last is not None:due=max(due,last+req.interval_hours*3600)
   for post in posts:
    account=req.connection_id if post['platform']=='youtube' else 'pending'
    # Block the same binary under another filename as well as repeat queue entries.
    if p.get('content_sha256'):
     for old, in c.execute('SELECT payload FROM social_queue WHERE owner=? AND platform=? AND account=? AND status!=?',(uid,post['platform'],account,'cancelled')):
-     if json.loads(old).get('content_sha256')==p['content_sha256']:raise HTTPException(409,'相同视频已在该账号排队或发布，请使用不同作品')
+     if json.loads(old).get('content_sha256')==p['content_sha256']:raise HTTPException(409,'此视频已有发布计划，请在原计划中查看或停止循环')
    status='scheduled' if post['platform']=='youtube' else 'awaiting_authorization'
-   item=dict(id=secrets.token_hex(16),project_id=p['id'],platform=post['platform'],account=account,due=due,status=status,post=post,content_sha256=p.get('content_sha256'),revision=p['revision'],privacy=req.privacy,made_for_kids=req.made_for_kids,contains_synthetic_media=req.contains_synthetic_media)
+   item=dict(id=secrets.token_hex(16),project_id=p['id'],platform=post['platform'],account=account,due=due,status=status,post=post,content_sha256=p.get('content_sha256'),revision=p['revision'],privacy=req.privacy,made_for_kids=req.made_for_kids,contains_synthetic_media=req.contains_synthetic_media,interval_hours=req.interval_hours,repeat_count=req.repeat_count,completed_count=0,history=[])
    try:c.execute('INSERT INTO social_queue VALUES(?,?,?,?,?,?,?,?)',(item['id'],uid,p['id'],post['platform'],account,item['due'],status,json.dumps(item,ensure_ascii=False)))
    except __import__('sqlite3').IntegrityError:raise HTTPException(409,'该作品已在此账号排队；请取消原任务或使用不同作品')
    rows.append(item)
@@ -196,16 +193,42 @@ async def cancel(qid:str,request:Request):
  with store.LOCK,store.connection() as c:
   row=c.execute('SELECT payload,status FROM social_queue WHERE id=? AND owner=?',(qid,uid)).fetchone()
   if not row:raise HTTPException(404,'任务不存在')
-  if row[1] not in ('scheduled','awaiting_authorization','failed'):raise HTTPException(409,'已开始上传，请到平台管理已提交内容')
-  item=json.loads(row[0]);item['status']='cancelled'
-  c.execute('DELETE FROM social_queue WHERE id=? AND owner=?',(qid,uid))
- return {'ok':True}
+  item=json.loads(row[0]);item['status']='stopped';item['stopped_at']=store.now()
+  c.execute('UPDATE social_queue SET status=?,payload=? WHERE id=? AND owner=?',('stopped',json.dumps(item,ensure_ascii=False),qid,uid))
+ return {'ok':True,'message':'已停止后续发布；已经提交的平台上传不会撤回'}
 
 def update_item(item):
- with store.connection() as c:c.execute('UPDATE social_queue SET status=?,payload=? WHERE id=?',(item['status'],json.dumps(item,ensure_ascii=False),item['id']))
+ with store.connection() as c:c.execute('UPDATE social_queue SET status=?,due=?,payload=? WHERE id=?',(item['status'],item['due'],json.dumps(item,ensure_ascii=False),item['id']))
+
+def advance_completed():
+ """Only a confirmed upload consumes an occurrence. Failed/uncertain jobs pause.
+
+ Missed slots are skipped, never replayed in a burst after a long outage.
+ """
+ with store.connection() as c:rows=c.execute("SELECT owner,payload FROM social_queue WHERE status='submitted'").fetchall()
+ for uid,raw in rows:
+  item=json.loads(raw)
+  if not item.get('youtube_job_id'):continue
+  try:job=yt.job_get(uid,item['youtube_job_id'])
+  except HTTPException:
+   item.update(status='needs_review',error='未找到对应上传记录，请先核对平台');update_item(item);continue
+  if job['status']!='uploaded':continue
+  count=item.get('completed_count',0)+1
+  item['completed_count']=count
+  item['history']=(item.get('history',[])+[{'job_id':job['id'],'url':job.get('url'),'due':item['due'],'observed_uploaded_at':store.now()}])[-100:]
+  total=item.get('repeat_count',1)
+  if total and count>=total:item['status']='completed'
+  else:
+   interval=item.get('interval_hours',6)*3600
+   due=item['due']+interval
+   if due<=time.time():due+=(int((time.time()-due)//interval)+1)*interval
+   item.update(status='scheduled',due=due)
+   item.pop('youtube_job_id',None)
+  update_item(item)
 
 async def tick():
  initialize()
+ advance_completed()
  with store.connection() as c:rows=c.execute("SELECT owner,payload FROM social_queue WHERE status='scheduled' AND due<=? ORDER BY due LIMIT 10",(time.time(),)).fetchall()
  for uid,raw in rows:
   item=json.loads(raw)
@@ -214,7 +237,10 @@ async def tick():
   if not claimed:continue
   try:
    owned(uid,item['project_id']);post=item['post']
-   job=yt.create_job(uid,dict(project_id=item['project_id'],revision=item['revision'],connection_id=item['account'],title=post['title'],description=post['caption']+'\n\n'+' '.join(post['hashtags']),tags=post['keywords'],privacy=item['privacy'],made_for_kids=item['made_for_kids'],contains_synthetic_media=item['contains_synthetic_media'],category_id='22',publish_at=None))
+   form=dict(project_id=item['project_id'],revision=item['revision'],connection_id=item['account'],title=post['title'],description=post['caption']+'\n\n'+' '.join(post['hashtags']),tags=post['keywords'],privacy=item['privacy'],made_for_kids=item['made_for_kids'],contains_synthetic_media=item['contains_synthetic_media'],category_id='22',publish_at=None)
+   # Stable per occurrence: retries reuse one upload, intentional repeats create a new one.
+   if 'repeat_count' in item:form['social_occurrence_id']=item['id']+':'+str(item.get('completed_count',0)+1)
+   job=yt.create_job(uid,form)
    item.update(status='submitted',youtube_job_id=job['id']);update_item(item)
    if job['status']=='queued':yt.launch(job)
   except Exception as e:

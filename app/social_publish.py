@@ -4,6 +4,7 @@ Only YouTube has a live adapter. Other targets remain reviewable/exportable draf
 No blind retries across an uncertain remote publishing boundary.
 """
 import asyncio, hashlib, json, logging, os, re, secrets, subprocess, time
+from difflib import SequenceMatcher
 from datetime import datetime, timezone
 from pathlib import Path
 import httpx, imageio_ffmpeg
@@ -30,7 +31,8 @@ PROFILES = {
 def initialize():
  with store.connection() as c:
   c.executescript('''CREATE TABLE IF NOT EXISTS social_drafts(id TEXT PRIMARY KEY,owner TEXT NOT NULL,payload TEXT NOT NULL);
-  CREATE TABLE IF NOT EXISTS social_queue(id TEXT PRIMARY KEY,owner TEXT NOT NULL,project TEXT NOT NULL,platform TEXT NOT NULL,account TEXT NOT NULL,due REAL NOT NULL,status TEXT NOT NULL,payload TEXT NOT NULL, UNIQUE(owner,project,platform,account));''')
+  CREATE TABLE IF NOT EXISTS social_queue(id TEXT PRIMARY KEY,owner TEXT NOT NULL,project TEXT NOT NULL,platform TEXT NOT NULL,account TEXT NOT NULL,due REAL NOT NULL,status TEXT NOT NULL,payload TEXT NOT NULL, UNIQUE(owner,project,platform,account));
+  CREATE TABLE IF NOT EXISTS social_occurrences(queue_id TEXT NOT NULL,occurrence INTEGER NOT NULL,owner TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(queue_id,occurrence));''')
 
 def owned(uid, pid):
  try: p=store.get(pid)
@@ -117,23 +119,39 @@ def validate_posts(raw,selected):
   if len(p['caption']+'\n'+' '.join(p['hashtags']))>caption:raise ValueError('正文和标签超过平台编辑限制')
  return posts
 
-@router.post('/drafts')
-async def drafts(req:DraftRequest,request:Request):
- uid=auth.require(request)['id'];p=owned(uid,req.project_id)
- if any(k not in PROFILES for k in req.platforms):raise HTTPException(400,'不支持的平台')
+def check_variation(posts,previous):
+ def norm(text):return re.sub(r'\W+','',text.casefold())
+ for p in posts:
+  for old in previous:
+   if old['platform']!=p['platform']:continue
+   if norm(p['title'])==norm(old['title']) or SequenceMatcher(None,norm(p['caption']),norm(old['caption'])).ratio()>=.9:raise ValueError('标题或正文与近期轮次重复，请换一个有事实依据的表达角度')
+   if {k.casefold().strip() for k in p['keywords']}=={k.casefold().strip() for k in old['keywords']}:raise ValueError('关键词组合与近期轮次相同，请使用相关的不同搜索短语')
+
+async def generate_posts(context,selected,previous=None,occurrence=1):
+ previous=previous or []
+ if any(k not in PROFILES for k in selected):raise HTTPException(400,'不支持的平台')
  if not CONFIG.get('DEEPSEEK_API_KEY'):raise HTTPException(503,'文案服务未配置 DeepSeek 密钥')
- messages=[{'role':'system','content':(ROOT/'prompts/social-publish.txt').read_text(encoding='utf-8')},{'role':'user','content':json.dumps({'brief':req.brief,'filename':p['title'],'language':req.language,'profiles':{k:dict(title_limit=PROFILES[k][1],caption_limit=PROFILES[k][2],hashtag_limit=PROFILES[k][3]) for k in dict.fromkeys(req.platforms)}},ensure_ascii=False)}]
+ messages=[{'role':'system','content':(ROOT/'prompts/social-publish.txt').read_text(encoding='utf-8')},{'role':'user','content':json.dumps({'source_context':context,'occurrence':occurrence,'recent_posts':previous,'profiles':{k:dict(title_limit=PROFILES[k][1],caption_limit=PROFILES[k][2],hashtag_limit=PROFILES[k][3]) for k in dict.fromkeys(selected)}},ensure_ascii=False)}]
  try:
   async with httpx.AsyncClient(timeout=httpx.Timeout(150,connect=20)) as c:
    for attempt in range(2):
     data=await completion_json(c,CONFIG['DEEPSEEK_API_KEY'],{'model':MODEL,'messages':messages,'response_format':{'type':'json_object'},'max_tokens':6500}, {})
-    try: posts=validate_posts(json.loads(data['choices'][0]['message']['content']),req.platforms);break
+    try:
+     posts=validate_posts(json.loads(data['choices'][0]['message']['content']),selected)
+     check_variation(posts,previous);break
     except (ValueError,KeyError,TypeError) as e:
      if attempt:raise
      messages.append({'role':'user','content':'上次输出未通过结构验证：'+str(e)[:160]+'。请重新返回完整 JSON，遵守各平台长度限制。'})
  except Exception as e:
   ref=secrets.token_hex(4);log.warning('Social copy failure ref=%s type=%s',ref,type(e).__name__);raise HTTPException(502,'文案生成失败，请重试。诊断编号：'+ref)
- initialize();draft=dict(id=secrets.token_hex(16),project_id=p['id'],revision=p['revision'],posts=posts,created_at=store.now())
+ return posts
+
+@router.post('/drafts')
+async def drafts(req:DraftRequest,request:Request):
+ uid=auth.require(request)['id'];p=owned(uid,req.project_id)
+ context=dict(brief=req.brief,filename=p['title'],language=req.language)
+ posts=await generate_posts(context,req.platforms)
+ initialize();draft=dict(id=secrets.token_hex(16),project_id=p['id'],revision=p['revision'],posts=posts,source_context=context,created_at=store.now())
  with store.connection() as c:c.execute('INSERT INTO social_drafts VALUES(?,?,?)',(draft['id'],uid,json.dumps(draft,ensure_ascii=False)))
  return draft
 
@@ -171,7 +189,7 @@ async def schedule(req:Schedule,request:Request):
     for old, in c.execute('SELECT payload FROM social_queue WHERE owner=? AND platform=? AND account=? AND status!=?',(uid,post['platform'],account,'cancelled')):
      if json.loads(old).get('content_sha256')==p['content_sha256']:raise HTTPException(409,'此视频已有发布计划，请在原计划中查看或停止循环')
    status='scheduled' if post['platform']=='youtube' else 'awaiting_authorization'
-   item=dict(id=secrets.token_hex(16),project_id=p['id'],platform=post['platform'],account=account,due=due,status=status,post=post,content_sha256=p.get('content_sha256'),revision=p['revision'],privacy=req.privacy,made_for_kids=req.made_for_kids,contains_synthetic_media=req.contains_synthetic_media,interval_hours=req.interval_hours,repeat_count=req.repeat_count,completed_count=0,history=[])
+   item=dict(id=secrets.token_hex(16),project_id=p['id'],platform=post['platform'],account=account,due=due,status=status,post=post,source_context=draft.get('source_context',{'filename':p['title']}),approved_post=post,content_sha256=p.get('content_sha256'),revision=p['revision'],privacy=req.privacy,made_for_kids=req.made_for_kids,contains_synthetic_media=req.contains_synthetic_media,interval_hours=req.interval_hours,repeat_count=req.repeat_count,completed_count=0,history=[])
    try:c.execute('INSERT INTO social_queue VALUES(?,?,?,?,?,?,?,?)',(item['id'],uid,p['id'],post['platform'],account,item['due'],status,json.dumps(item,ensure_ascii=False)))
    except __import__('sqlite3').IntegrityError:raise HTTPException(409,'该作品已在此账号排队；请取消原任务或使用不同作品')
    rows.append(item)
@@ -186,6 +204,25 @@ async def queue(request:Request):
    try:item['upload']=yt.public_job(yt.job_get(uid,item['youtube_job_id']))
    except HTTPException:pass
  return items
+
+@router.get('/queue/{qid}/occurrences')
+async def occurrences(qid:str,request:Request):
+ uid=auth.require(request)['id'];initialize()
+ with store.connection() as c:
+  if not c.execute('SELECT 1 FROM social_queue WHERE id=? AND owner=?',(qid,uid)).fetchone():raise HTTPException(404,'任务不存在')
+  return [json.loads(r[0]) for r in c.execute('SELECT payload FROM social_occurrences WHERE queue_id=? AND owner=? ORDER BY occurrence DESC LIMIT 100',(qid,uid))]
+
+@router.post('/queue/{qid}/retry-copy')
+async def retry_copy(qid:str,request:Request):
+ uid=auth.require(request)['id'];initialize()
+ with store.connection() as c:
+  row=c.execute('SELECT payload FROM social_queue WHERE id=? AND owner=?',(qid,uid)).fetchone()
+  if not row:raise HTTPException(404,'任务不存在')
+  item=json.loads(row[0])
+  if item['status']!='copy_failed':raise HTTPException(409,'仅可重试未提交上传的文案失败任务')
+  item.update(status='scheduled',due=time.time());item.pop('error',None)
+  c.execute('UPDATE social_queue SET status=?,due=?,payload=? WHERE id=?',('scheduled',item['due'],json.dumps(item,ensure_ascii=False),qid))
+ return {'ok':True}
 
 @router.post('/queue/{qid}/cancel')
 async def cancel(qid:str,request:Request):
@@ -215,7 +252,12 @@ def advance_completed():
   if job['status']!='uploaded':continue
   count=item.get('completed_count',0)+1
   item['completed_count']=count
-  item['history']=(item.get('history',[])+[{'job_id':job['id'],'url':job.get('url'),'due':item['due'],'observed_uploaded_at':store.now()}])[-100:]
+  item['history']=(item.get('history',[])+[{'job_id':job['id'],'url':job.get('url'),'due':item['due'],'post':item['post'],'observed_uploaded_at':store.now()}])[-100:]
+  with store.connection() as c:
+   row=c.execute('SELECT payload FROM social_occurrences WHERE queue_id=? AND occurrence=?',(item['id'],count)).fetchone()
+   if row:
+    record=json.loads(row[0]);record.update(status='uploaded',url=job.get('url'))
+    c.execute('UPDATE social_occurrences SET payload=? WHERE queue_id=? AND occurrence=?',(json.dumps(record,ensure_ascii=False),item['id'],count))
   total=item.get('repeat_count',1)
   if total and count>=total:item['status']='completed'
   else:
@@ -226,6 +268,21 @@ def advance_completed():
    item.pop('youtube_job_id',None)
   update_item(item)
 
+async def prepare_post(uid,item):
+ number=item.get('completed_count',0)+1
+ with store.connection() as c:row=c.execute('SELECT payload FROM social_occurrences WHERE queue_id=? AND occurrence=? AND owner=?',(item['id'],number,uid)).fetchone()
+ if row:return json.loads(row[0])['post']
+ post=item['post']
+ if number>1:
+  context=dict(item.get('source_context',{}),approved_post=item.get('approved_post',item['post']))
+  previous=[h['post'] for h in item.get('history',[]) if h.get('post')][-8:]
+  if not previous or previous[-1]!=item['post']:previous.append(item['post'])
+  posts=await generate_posts(context,[item['platform']],previous,number)
+  post=validate_posts({'posts':posts},[item['platform']])[0];check_variation([post],previous)
+ record=dict(occurrence=number,post=post,created_at=store.now(),status='prepared',generated=number>1)
+ with store.connection() as c:c.execute('INSERT OR IGNORE INTO social_occurrences VALUES(?,?,?,?)',(item['id'],number,uid,json.dumps(record,ensure_ascii=False)))
+ return post
+
 async def tick():
  initialize()
  advance_completed()
@@ -233,21 +290,38 @@ async def tick():
  for uid,raw in rows:
   item=json.loads(raw)
   with store.connection() as c:
-   claimed=c.execute("UPDATE social_queue SET status='dispatching' WHERE id=? AND status='scheduled'",(item['id'],)).rowcount
+   claimed=c.execute("UPDATE social_queue SET status='preparing' WHERE id=? AND status='scheduled'",(item['id'],)).rowcount
   if not claimed:continue
   try:
-   owned(uid,item['project_id']);post=item['post']
+   owned(uid,item['project_id'])
+   try:post=await prepare_post(uid,item)
+   except Exception as exc:
+    with store.connection() as c:current=c.execute('SELECT status FROM social_queue WHERE id=?',(item['id'],)).fetchone()
+    if current and current[0]=='preparing':
+     item.update(status='copy_failed',error='本轮文案生成未通过，未提交上传。可重试文案。');update_item(item)
+    log.warning('Social recurring copy failure type=%s',type(exc).__name__);continue
+   # Generation awaits the API: a user may stop the loop while it is running.
+   with store.connection() as c:
+    if not c.execute("UPDATE social_queue SET status='dispatching' WHERE id=? AND status='preparing'",(item['id'],)).rowcount:continue
+   item.update(post=post,status='dispatching');update_item(item)
    form=dict(project_id=item['project_id'],revision=item['revision'],connection_id=item['account'],title=post['title'],description=post['caption']+'\n\n'+' '.join(post['hashtags']),tags=post['keywords'],privacy=item['privacy'],made_for_kids=item['made_for_kids'],contains_synthetic_media=item['contains_synthetic_media'],category_id='22',publish_at=None)
    # Stable per occurrence: retries reuse one upload, intentional repeats create a new one.
    if 'repeat_count' in item:form['social_occurrence_id']=item['id']+':'+str(item.get('completed_count',0)+1)
    job=yt.create_job(uid,form)
    item.update(status='submitted',youtube_job_id=job['id']);update_item(item)
+   with store.connection() as c:
+    number=item.get('completed_count',0)+1
+    record=json.loads(c.execute('SELECT payload FROM social_occurrences WHERE queue_id=? AND occurrence=?',(item['id'],number)).fetchone()[0])
+    record.update(status='submitted',job_id=job['id'])
+    c.execute('UPDATE social_occurrences SET payload=? WHERE queue_id=? AND occurrence=?',(json.dumps(record,ensure_ascii=False),item['id'],number))
    if job['status']=='queued':yt.launch(job)
   except Exception as e:
    item.update(status='failed',error=str(e.detail) if isinstance(e,HTTPException) else '任务提交失败，请检查服务日志');update_item(item);log.warning('Social dispatch failure type=%s',type(e).__name__)
 
 async def worker():
  initialize()
+ # API-only preparation is safe to resume; the prepared occurrence is durable.
+ with store.connection() as c:c.execute("UPDATE social_queue SET status='scheduled' WHERE status='preparing'")
  with store.connection() as c:
   rows=c.execute("SELECT payload FROM social_queue WHERE status='dispatching'").fetchall()
  for raw, in rows:

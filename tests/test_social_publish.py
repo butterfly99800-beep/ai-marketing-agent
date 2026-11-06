@@ -1,6 +1,6 @@
 import asyncio,json,tempfile,time,unittest,subprocess
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch,AsyncMock
 from datetime import datetime,timezone,timedelta
 import httpx,imageio_ffmpeg
 from app import store,ops_auth as auth,social_publish as social,youtube_service as yt
@@ -73,7 +73,8 @@ class SocialTests(unittest.IsolatedAsyncioTestCase):
   row=(await self.c.get('/api/ops/social/queue')).json()[0]
   self.assertEqual(row['status'],'scheduled');self.assertEqual(row['completed_count'],1);self.assertEqual(row['project_id'],item['project_id']);self.assertEqual(row['due'],first_due+21600)
   row['due']=time.time()-1;social.update_item(row)
-  with patch.object(yt,'create_job',return_value={'id':'job-2','status':'queued'}) as create,patch.object(yt,'launch'):
+  changed=dict(platform='youtube',title='Organize ocean freight',caption='Keep your shipment planning together.',keywords=['shipment planning'],hashtags=['#Logistics'])
+  with patch.object(yt,'create_job',return_value={'id':'job-2','status':'queued'}) as create,patch.object(yt,'launch'),patch.object(social,'generate_posts',AsyncMock(return_value=[changed])):
    await social.tick();self.assertEqual(create.call_args.args[1]['project_id'],item['project_id']);self.assertEqual(create.call_args.args[1]['social_occurrence_id'],item['id']+':2')
   with patch.object(yt,'job_get',return_value={'id':'job-2','status':'uploaded'}):await social.tick();await social.tick()
   row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'completed');self.assertEqual(row['completed_count'],2)
@@ -97,5 +98,55 @@ class SocialTests(unittest.IsolatedAsyncioTestCase):
   d=self.draft(platform='x');form=self.form(d);form['repeat_count']=0
   self.assertEqual((await self.c.post('/api/ops/social/schedule',json=form)).status_code,400)
   form['repeat_count']=1;self.assertEqual((await self.c.post('/api/ops/social/schedule',json=form)).status_code,200)
+
+ async def round_two(self):
+  item=await self.recurring(0)
+  with patch.object(yt,'job_get',return_value={'id':'job-1','status':'uploaded'}):await social.tick()
+  item=(await self.c.get('/api/ops/social/queue')).json()[0];item['due']=time.time()-1;social.update_item(item);return item
+
+ def varied(self):return dict(platform='youtube',title='Organize ocean freight',caption='Keep your shipment planning together.',keywords=['shipment planning'],hashtags=['#Logistics'])
+
+ async def test_each_repeat_uses_new_platform_copy_and_saves_it(self):
+  item=await self.round_two();new=self.varied()
+  with patch.object(social,'generate_posts',AsyncMock(return_value=[new])) as gen,patch.object(yt,'create_job',return_value={'id':'job-2','status':'queued'}) as create,patch.object(yt,'launch'):
+   await social.tick();gen.assert_awaited_once();self.assertEqual(gen.call_args.args[1],['youtube']);self.assertEqual(gen.call_args.args[3],2);self.assertEqual(create.call_args.args[1]['title'],new['title']);self.assertEqual(create.call_args.args[1]['tags'],new['keywords'])
+  records=(await self.c.get('/api/ops/social/queue/'+item['id']+'/occurrences')).json();self.assertEqual(records[0]['post'],new);self.assertEqual(records[0]['occurrence'],2)
+
+ async def test_repeated_copy_fails_closed_and_can_retry(self):
+  item=await self.round_two()
+  with patch.object(social,'generate_posts',AsyncMock(return_value=[item['post']])),patch.object(yt,'create_job') as create:
+   await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'copy_failed');self.assertEqual(row['completed_count'],1)
+  self.assertEqual((await self.c.post('/api/ops/social/queue/'+item['id']+'/retry-copy')).status_code,200)
+
+ async def test_network_copy_failure_does_not_reuse_old_text(self):
+  item=await self.round_two()
+  with patch.object(social,'generate_posts',AsyncMock(side_effect=RuntimeError('fixture network failure'))),patch.object(yt,'create_job') as create:
+   await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'copy_failed')
+
+ async def test_stop_during_generation_prevents_upload(self):
+  item=await self.round_two()
+  async def stopped(*args):
+   r=await self.c.post('/api/ops/social/queue/'+item['id']+'/cancel');self.assertEqual(r.status_code,200);return [self.varied()]
+  with patch.object(social,'generate_posts',side_effect=stopped),patch.object(yt,'create_job') as create:await social.tick();create.assert_not_called()
+  row=(await self.c.get('/api/ops/social/queue')).json()[0];self.assertEqual(row['status'],'stopped')
+
+ async def test_prepared_copy_is_reused_within_same_occurrence(self):
+  item=await self.round_two()
+  with patch.object(social,'generate_posts',AsyncMock(return_value=[self.varied()])) as gen:
+   a=await social.prepare_post(self.uid,item);b=await social.prepare_post(self.uid,item);self.assertEqual(a,b);gen.assert_awaited_once()
+
+ async def test_keywords_must_change_even_if_caption_changes(self):
+  old=self.varied();new=dict(old,title='Shipping operations guide',caption='Understand the next steps before your cargo leaves.')
+  with self.assertRaises(ValueError):social.check_variation([new],[old])
+
+ async def test_generation_passes_context_language_and_repairs_duplicate(self):
+  old=self.varied();new=dict(platform='youtube',title='Freight comparison workflow',caption='Compare freight options before arranging your next shipment.',keywords=['ocean freight comparison'],hashtags=['#Freight'])
+  def envelope(post):return {'choices':[{'message':{'content':json.dumps({'posts':[post]})}}]}
+  with patch.dict(social.CONFIG,{'DEEPSEEK_API_KEY':'fixture-only'}),patch.object(social,'completion_json',AsyncMock(side_effect=[envelope(old),envelope(new)])) as completion:
+   posts=await social.generate_posts({'brief':'Official demo','language':'English'},['youtube'],[old],2)
+   self.assertEqual(posts,[new]);self.assertEqual(completion.await_count,2)
+   payload=completion.call_args.args[2];source=json.loads(payload['messages'][1]['content']);self.assertEqual(source['source_context']['language'],'English');self.assertEqual(source['occurrence'],2);self.assertEqual(source['recent_posts'],[old])
 
 if __name__=='__main__':unittest.main()
